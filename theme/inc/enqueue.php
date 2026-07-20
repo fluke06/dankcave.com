@@ -64,12 +64,15 @@ add_action( 'wp_enqueue_scripts', 'dankcave_enqueue_assets' );
 
 /**
  * Preload the fonts that render above the fold. Trims LCP.
- * Update the file list once the fonts folder is populated.
+ * Only preload fonts that appear in the hero / initial viewport:
+ *   - Gabarito (variable) — dominant body + UI copy
+ *   - Bricolage Grotesque 700 — display headings
+ * Instrument Serif ships without preload (only used further down in editorial blocks).
  */
 function dankcave_preload_fonts() {
 	$fonts = array(
-		'gabarito-400.woff2',
-		'gabarito-700.woff2',
+		'gabarito-variable.woff2',
+		'bricolagegrotesque-700.woff2',
 	);
 	foreach ( $fonts as $f ) {
 		$path = DANKCAVE_DIR . 'assets/fonts/' . $f;
