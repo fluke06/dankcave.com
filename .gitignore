@@ -48,5 +48,8 @@ wp-content/upgrade/
 tmp/
 *.tmp
 
+# QA output (regenerated on each run)
+qa/screenshots/
+
 # macOS metadata
 ._*
