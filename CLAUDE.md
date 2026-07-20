@@ -330,8 +330,10 @@ Confirmed as **standard Shopify customer CSV export**. Migration is straightforw
 ## Git / commit conventions
 
 - **NEVER** add `Co-Authored-By: Claude` or any co-author line to commits or PR descriptions on any project. This is a permanent preference (per user memory).
+- **Commit cadence**: only commit at the "work unit finished + QA passes" boundary. A commit represents a shippable, tested unit — a completed template, a completed block pattern, a completed migration script, etc. Don't commit mid-work or as arbitrary checkpoints. Run Playwright + PHP lint + manual smoke test in the Docker mirror BEFORE committing.
+- Commit messages describe the finished unit and its behavior, not "wip" / "checkpoint" language.
 - Small, focused commits with meaningful messages.
-- Version-tag every release in `style.css` header AND a `THEME_VERSION` constant in `functions.php`. Bump both together.
+- Version-tag every release in `style.css` header AND the `DANKCAVE_VERSION` constant in `functions.php`. Bump both together.
 - Follow the same pattern ToolPlaybook uses.
 
 ## Working conventions for this project
