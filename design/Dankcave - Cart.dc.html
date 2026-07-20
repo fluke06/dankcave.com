@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics="">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>html{scroll-behavior:smooth}html,body{margin:0;width:100%;background:#171310;font-family:Gabarito,sans-serif}a{color:inherit}a:hover{opacity:.9}x-dc{display:block;width:100%}.dv-card{width:100%!important;max-width:none!important;box-sizing:border-box}@media(max-width:760px){[style*="grid-template-columns:110px 1fr auto"]{grid-template-columns:84px 1fr!important}[style*="grid-template-columns:110px 1fr auto"] > div:last-child{grid-column:1/3!important;flex-direction:row!important;justify-content:space-between!important;align-items:center!important}}@media(max-width:900px){[style*="grid-template-columns:1fr 380px"]{grid-template-columns:1fr!important}[style*="grid-template-columns:1.3fr 1fr"]{grid-template-columns:1fr!important}aside[style*="sticky"]{position:static!important}}
+@media(max-width:640px){[style*="padding:56px 48px"]{padding:40px 20px!important}[style*="padding:40px 48px"]{padding:32px 20px!important}[style*="padding:22px 48px"]{padding:20px!important}[style*="padding:20px 48px"]{padding:16px 20px!important}[style*="padding:34px 48px"]{padding:28px 20px!important}h1[style*="font-size:46px"]{font-size:32px!important}[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}[style*="justify-content:space-between;align-items:center;gap:40px"]{flex-direction:column!important;align-items:flex-start!important;gap:20px!important}nav[style*="border-radius:99px"]{gap:14px!important;padding:12px 16px!important;font-size:13px!important}[style*="width:240px"]{width:auto!important;flex:1!important}[style*="cart-line"]{grid-template-columns:78px 1fr!important}}</style>
+</helmet>
+<div class="dv-card" style="width:100%;min-height:100vh;background:#f2f0ee;color:#22242a;font-family:Gabarito,sans-serif" data-screen-label="Cart">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:20px 48px;position:sticky;top:0;z-index:20;background:#f2f0ee">
+    <a href="Dankcave - Broken Headline.dc.html" style="height:52px;display:flex;align-items:center;text-decoration:none"><img src="uploads/dankcave-logo-cutout.png" alt="Dankcave" style="height:100%;width:auto;object-fit:contain"></a>
+    <nav style="display:flex;gap:32px;background:#fff;border-radius:99px;padding:16px 34px;font-size:15px;font-weight:600;box-shadow:0 2px 10px rgba(34,36,42,.06)">
+      <a href="Dankcave - Listing.dc.html" style="text-decoration:none;color:#8a8e96">Shop</a><a href="Dankcave - Listing.dc.html" style="text-decoration:none;color:#8a8e96">New in</a><a href="Dankcave - Listing.dc.html" style="text-decoration:none;color:#8a8e96">Glass</a><a href="Dankcave - Blog.dc.html" style="text-decoration:none;color:#8a8e96">Blog</a><a href="Dankcave - Page.dc.html" style="text-decoration:none;color:#8a8e96">About</a>
+    </nav>
+    <div style="display:flex;gap:10px;align-items:center"><div style="height:50px;width:50px;border-radius:14px;background:#fff;display:grid;place-items:center;box-shadow:0 2px 10px rgba(34,36,42,.06);font-size:16px">⌕</div><a href="Dankcave - Cart.dc.html" style="text-decoration:none;color:#22242a;height:50px;border-radius:14px;background:#fff;display:grid;place-items:center;font-size:14px;font-weight:700;padding:0 18px;box-shadow:0 2px 10px rgba(34,36,42,.06)">Bag · 3</a></div>
+  </div>
+  <div style="padding:44px 48px 8px"><h1 style="font-family:Gabarito,sans-serif;font-weight:800;font-size:46px;letter-spacing:-.03em;margin:0;line-height:1">Your bag</h1><div style="font-size:14.5px;color:#5c616a;margin-top:8px">{{ freeLeft }}</div></div>
+  <div style="display:grid;grid-template-columns:1fr 380px;gap:32px;padding:24px 48px 56px;align-items:start">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <sc-for list="{{ items }}" as="it" hint-placeholder-count="3">
+        <div data-cart-line style="display:grid;grid-template-columns:110px 1fr auto;gap:20px;align-items:center;background:#fff;border-radius:20px;padding:18px 22px">
+          <div style="aspect-ratio:1;background:{{ it.t }};border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="{{ it.img }}" alt="" style="max-height:78%;max-width:78%;object-fit:contain"></div>
+          <div style="display:flex;flex-direction:column;gap:5px"><div style="font-weight:700;font-size:17px">{{ it.n }}</div><div style="font-size:13.5px;color:#8a8e96">Color · {{ it.v }}</div><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:17px;margin-top:4px">${{ it.p }}</div></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px">
+            <div style="display:flex;align-items:center;background:#f2f0ee;border-radius:12px;overflow:hidden"><span onClick="{{ it.dec }}" style="padding:10px 14px;cursor:pointer;font-size:17px;user-select:none">−</span><span style="min-width:22px;text-align:center;font-weight:700">{{ it.q }}</span><span onClick="{{ it.inc }}" style="padding:10px 14px;cursor:pointer;font-size:17px;user-select:none">+</span></div>
+            <span onClick="{{ it.remove }}" style="font-size:12.5px;color:#8a8e96;cursor:pointer;text-decoration:underline;text-underline-offset:2px">Remove</span>
+          </div>
+        </div>
+      </sc-for>
+      <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}"><div style="background:#fff;border-radius:20px;padding:44px;text-align:center;color:#5c616a"><div style="font-weight:700;font-size:18px;margin-bottom:8px;color:#22242a">Your bag is empty</div><a href="Dankcave - Listing.dc.html" style="text-decoration:none;color:#993331;font-weight:700">Back to shop →</a></div></sc-if>
+      <a href="Dankcave - Listing.dc.html" style="text-decoration:none;color:#993331;font-weight:700;font-size:14px;padding:6px 2px">← Continue shopping</a>
+    </div>
+    <aside style="position:sticky;top:96px;background:#fff;border-radius:24px;padding:28px;box-shadow:0 2px 12px rgba(34,36,42,.05)">
+      <div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:20px;margin-bottom:18px">Order summary</div>
+      <div style="display:flex;justify-content:space-between;font-size:14.5px;color:#3f434a;padding:8px 0"><span>Subtotal</span><span style="font-weight:700">${{ sub }}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:14.5px;color:#3f434a;padding:8px 0"><span>Shipping</span><span style="font-weight:700">{{ ship }}</span></div>
+      <div style="display:flex;gap:8px;padding:14px 0"><div style="flex:1;background:#f2f0ee;border-radius:12px;padding:12px 16px;font-size:13.5px;color:#8a8e96">Discount code</div><span style="background:#f2f0ee;border-radius:12px;font-weight:700;font-size:13px;padding:12px 16px;cursor:pointer">Apply</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:18px;font-weight:800;padding:14px 0;border-top:1px solid #e2ded9;margin-top:6px"><span>Total</span><span>${{ total }}</span></div>
+      <a href="Dankcave - Checkout.dc.html" style="display:block;text-align:center;background:#22242a;color:#fff;font-weight:700;font-size:15px;letter-spacing:.04em;padding:16px;border-radius:14px;text-decoration:none;margin-top:10px" style-hover="background:#993331">Checkout · ${{ total }}</a>
+      <div style="display:flex;justify-content:center;gap:16px;margin-top:16px;font-size:12px;color:#8a8e96;font-weight:600"><span>🔒 Secure</span><span>Visa</span><span>MC</span><span>Amex</span></div>
+    </aside>
+  </div>
+  <div style="background:#22242a;padding:40px 48px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:40px"><div style="max-width:420px"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;margin-bottom:8px">Vices, handled with care.</div><div style="font-size:14.5px;color:#8a8e96;line-height:1.6">Drops, deals, and the occasional bad influence — in your inbox, 21+ only.</div></div><div style="display:flex;gap:10px;flex:none"><div style="background:rgba(255,255,255,.08);border:1px solid #4a4d54;border-radius:16px;padding:14px 22px;font-size:14px;color:#8a8e96;width:240px">your@email.com</div><a href="#" style="background:#993331;color:#fff;font-weight:700;padding:14px 26px;border-radius:16px;text-decoration:none;font-size:14px">Join the cave</a></div></div>
+  <div style="background:#1a1c21;padding:22px 48px;color:rgba(255,255,255,.75);font-size:13px;font-weight:600"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px"><span>© 2026 Dankcave · Adults 21+ · Tracy, CA</span><div style="display:flex;gap:22px;flex-wrap:wrap"><a href="Dankcave - Page.dc.html" style="text-decoration:none;color:rgba(255,255,255,.75)">Shipping</a><a href="Dankcave - Page.dc.html" style="text-decoration:none;color:rgba(255,255,255,.75)">Returns</a><a href="Dankcave - Page.dc.html" style="text-decoration:none;color:rgba(255,255,255,.75)">Privacy</a><a href="Dankcave - Page.dc.html" style="text-decoration:none;color:rgba(255,255,255,.75)">Terms</a></div></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;freeShipThreshold&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:50,&quot;min&quot;:0,&quot;max&quot;:150,&quot;step&quot;:5,&quot;unit&quot;:&quot;$&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Cart&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#993331&quot;,&quot;options&quot;:[&quot;#993331&quot;,&quot;#f8c913&quot;,&quot;#e8871e&quot;,&quot;#2e6b3e&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Brand&quot;}}">
+class Component extends DCLogic {
+  state={ items:[{n:'Multivariant E-Vape',v:'Fuchsia',p:199,q:1,img:'uploads/photos-1784328340446.png',t:'#f7e0ea'},{n:'Glycerin Beaker Bong',v:'Blue',p:89,q:1,img:'uploads/nuff-life-glycerin-beaker-bong-blue_1.png',t:'#eee9e0'},{n:'Connect Glass Dab Rig',v:'Clear',p:79,q:1,img:'uploads/connect-glass-dab-rig-with-banger-and-carb-cap.png',t:'#f3e3d0'}] };
+  chg(i,d){ this.setState(s=>({items:s.items.map((it,idx)=>idx===i?{...it,q:Math.max(1,it.q+d)}:it)})); }
+  rm(i){ this.setState(s=>({items:s.items.filter((_,idx)=>idx!==i)})); }
+  componentDidUpdate(){ this.applyAccent(); }
+  componentDidMount(){ this.applyAccent(); }
+  applyAccent(){ const accent=(this.props||{}).accent||'#993331'; document.querySelectorAll('.dv-card [style]').forEach(el=>{const s=el.getAttribute('style')||''; if(!s.includes('#993331'))return; const bg=/background(-color)?\s*:[^;]*#993331/i.test(s); el.setAttribute('style', s.split('#993331').join(accent)); if(bg)el.style.color='#fff';}); }
+  renderVals(){
+    const p=this.props||{};
+    const thr=(p.freeShipThreshold!=null)?p.freeShipThreshold:50;
+    const raw=this.state.items;
+    const items=raw.map((it,i)=>({...it, inc:()=>this.chg(i,1), dec:()=>this.chg(i,-1), remove:()=>this.rm(i)}));
+    const sub=raw.reduce((a,it)=>a+it.p*it.q,0);
+    const ship=sub>thr||sub===0?0:6.99;
+    const total=sub+ship;
+    return { items, sub:sub.toFixed(2), ship:ship===0?'FREE':('$'+ship.toFixed(2)), total:total.toFixed(2), empty:items.length===0, freeLeft: sub===0?'Your bag is empty.':(sub<thr?('Add $'+(thr-sub).toFixed(2)+' more for free shipping.'):'You have unlocked free shipping.') };
+  }
+}
+</script>
+</body>
+</html>

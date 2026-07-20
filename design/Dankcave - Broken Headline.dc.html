@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Archivo:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;700&amp;family=Unbounded:wght@400;600;800&amp;family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&amp;family=Gabarito:wght@400;500;600;700;800&amp;family=Rubik+Spray+Paint&amp;family=Permanent+Marker&amp;display=swap" rel="stylesheet">
+<style>html{scroll-behavior:smooth}html,body{margin:0;width:100%;background:#171310;font-family:Gabarito,sans-serif}a{color:inherit}a:hover{opacity:.9}x-dc{display:block;width:100%}.dv-card{width:100%!important;max-width:none!important;box-sizing:border-box}@keyframes dcmarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}@keyframes dcSlideL{from{opacity:0;transform:translateX(-50px)}to{opacity:1;transform:translateX(0)}}@keyframes dcSlideR{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:translateX(0)}}@keyframes dcFadeUp{from{opacity:0}to{opacity:1}}
+/* ---------- responsive ---------- */
+@media(max-width:900px){
+  [style*="repeat(4,minmax(0,1fr))"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  [style*="repeat(3,minmax(0,1fr))"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  [style*="grid-template-columns:repeat(4,1fr);grid-auto-rows:255px"]{grid-template-columns:repeat(2,1fr)!important;grid-auto-rows:200px!important}
+  [style*="grid-template-columns:repeat(4,1fr);grid-auto-rows:255px"] > a{grid-column:auto!important;grid-row:auto!important}
+  [style*="grid-template-columns:repeat(4,1fr);grid-auto-rows:255px"] > a:first-child{grid-column:1/3!important}
+  [style*="width:52%;padding:52px 56px"]{width:auto!important;right:0!important;padding:36px 30px!important}
+}
+@media(max-width:640px){
+  [style*="padding:56px 48px"]{padding:40px 20px!important}
+  [style*="padding:72px 48px 0"]{padding:48px 20px 0!important}
+  [style*="padding:40px 48px"]{padding:32px 20px!important}
+  [style*="padding:22px 48px"]{padding:20px!important}
+  [style*="repeat(2,minmax(0,1fr))"],[style*="repeat(4,minmax(0,1fr))"],[style*="repeat(3,minmax(0,1fr))"]{grid-template-columns:1fr 1fr!important}
+  [style*="grid-template-columns:repeat(4,1fr);grid-auto-rows:255px"]{grid-auto-rows:150px!important}
+  /* hero */
+  [style*="height:750px"]{height:520px!important}
+  [style*="font-size:150px"]{font-size:60px!important}
+  [style*="left:64px;top:150px"]{left:20px!important;top:120px!important}
+  [style*="translateX(-46%) rotate(18deg);height:560px"]{height:280px!important;top:170px!important;left:56%!important}
+  [style*="right:64px;top:150px"]{display:none!important}
+  [style*="right:56px;bottom:44px"]{right:20px!important;bottom:20px!important}
+  [style*="left:64px;bottom:64px"]{left:20px!important;bottom:24px!important}
+  /* stack flex rows */
+  [style*="justify-content:space-between;align-items:center;gap:40px"]{flex-direction:column!important;align-items:flex-start!important;gap:20px!important}
+  [style*="justify-content:space-between;align-items:flex-end;gap:40px"]{flex-direction:column!important;align-items:flex-start!important;gap:16px!important}
+  [style*="No fuss"]{font-size:34px!important}
+  h1[style*="font-size:52px"],h2[style*="font-size:52px"]{font-size:34px!important}
+  [style*="font-size:46px"]{font-size:30px!important}
+  nav[style*="border-radius:99px"]{gap:16px!important;padding:12px 18px!important;font-size:13px!important}
+  [style*="width:240px"]{width:auto!important;flex:1!important}
+}</style>
+</helmet>
+<div class="dv-card" style="width:100%;background:linear-gradient(160deg,#2b2521,#211b18 45%,#171310);padding:0;font-family:Gabarito,sans-serif;display:flex;flex-direction:column;gap:0" data-screen-label="5b Homepage">
+  <div style="background:#f2f0ee;position:relative;overflow:hidden;height:750px;color:#22242a">
+    <div style="position:absolute;inset:0;background:radial-gradient(500px 400px at 62% 55%,oklch(0.93 0.04 75 / .9),transparent 70%)"></div>
+    <div style="position:relative;display:flex;justify-content:center;align-items:center;gap:14px;padding-top:34px">
+      <div style="height:60px;display:flex;align-items:center;flex:none;margin-right:6px"><img src="uploads/dankcave-logo-cutout.png" alt="Dankcave" style="height:100%;width:auto;object-fit:contain"></div>
+      <nav style="display:flex;gap:32px;background:#fff;border-radius:99px;padding:17px 36px;font-size:15px;font-weight:600;box-shadow:0 2px 10px rgba(34,36,42,.06)">
+        <a href="#5b" style="text-decoration:none">Collection</a><a href="#5b" style="text-decoration:none;color:#8a8e96">New in</a><a href="#5b" style="text-decoration:none;color:#8a8e96">Glass</a><a href="#5b" style="text-decoration:none;color:#8a8e96">About</a>
+      </nav>
+      <div style="height:52px;border-radius:16px;background:#fff;display:grid;place-items:center;font-size:14px;font-weight:700;padding:0 18px;box-shadow:0 2px 10px rgba(34,36,42,.06)">Bag · 0</div>
+    </div>
+    <div style="position:absolute;left:64px;top:150px;font-family:Gabarito,sans-serif;font-weight:800;font-size:150px;line-height:.92;letter-spacing:-.04em;color:#2a2d34;animation:dcSlideL .8s cubic-bezier(.2,.8,.2,1) both">Sess<br>ions</div>
+    <img src="uploads/photos-1784328340446.png" alt="E-Vape" style="position:absolute;left:50%;top:110px;transform:translateX(-46%) rotate(18deg);height:560px;animation:dcFadeUp 1.1s cubic-bezier(.2,.8,.2,1) both;filter:drop-shadow(-20px 30px 40px rgba(34,36,42,.25))">
+    <div style="position:absolute;right:64px;top:150px;background:rgba(255,255,255,.75);border-radius:18px;padding:20px 24px;max-width:250px;backdrop-filter:blur(4px)">
+      <div style="font-weight:700;font-size:16px;margin-bottom:6px">E-Vape One</div>
+      <div style="font-size:14.5px;line-height:1.5;color:#5c616a">Ceramic-coil vapor.<br>One-button sessions.</div>
+    </div>
+    <div style="position:absolute;right:56px;bottom:44px;font-family:Gabarito,sans-serif;font-weight:800;font-size:150px;line-height:1;letter-spacing:-.04em;color:#993331;animation:dcSlideR .95s cubic-bezier(.2,.8,.2,1) both">higher.</div>
+    <div style="position:absolute;left:64px;bottom:64px">
+      <a href="#5b" style="display:inline-flex;align-items:center;gap:0;text-decoration:none">
+        <span style="background:#22242a;color:#fff;font-weight:600;font-size:16px;padding:16px 28px;border-radius:16px 0 0 16px">Discover collection</span>
+        <span style="background:#993331;color:#fff;padding:16px 20px;border-radius:0 16px 16px 0;font-size:16px">↗</span>
+      </a>
+      <div style="font-size:14.5px;color:#5c616a;margin-top:16px;max-width:34ch;line-height:1.5">Curated vapes and glass that blur the line between gear and ritual.</div>
+    </div>
+  </div>
+  <div style="background:#f2f0ee;padding:56px 48px;color:#22242a">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px">
+      <h2 style="font-family:Gabarito,sans-serif;font-weight:800;font-size:30px;margin:0;letter-spacing:-.02em">Pick your poison</h2>
+      <a href="#5b" style="font-weight:700;font-size:14px;color:#993331;text-decoration:none">All vaporizers →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">
+      <div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><div style="aspect-ratio:1;background:#f7e0ea;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/photos-1784328340446.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">THE LOUD ONE</div><div style="font-weight:700;font-size:15px;line-height:1.35">E-Vape One — Fuchsia</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★★<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(98)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$199</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div>
+      <div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><span style="position:absolute;top:14px;left:14px;background:#f8c913;color:#22242a;border-radius:99px;font-size:11px;font-weight:800;padding:4px 10px;z-index:2">KIT</span><div style="aspect-ratio:1;background:#e2e6f1;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/pasted-1784342150041-0.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">AFTER HOURS</div><div style="font-weight:700;font-size:15px;line-height:1.35">E-Vape Kit — Deep Blue</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★★<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(64)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$219</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div>
+      <div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><div style="aspect-ratio:1;background:#efdcd8;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/pasted-1784342163973-0.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">THE CLASSIC</div><div style="font-weight:700;font-size:15px;line-height:1.35">E-Vape One — Oxblood</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★☆<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(41)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$199</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div>
+      <div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><div style="aspect-ratio:1;background:#d9ede6;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/pasted-1784342176659-0.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">EASY DAYS</div><div style="font-weight:700;font-size:15px;line-height:1.35">E-Vape One — Seafoam</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★★<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(77)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$199</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div>
+    </div>
+  </div>
+  <div style="background:#f2f0ee;color:#22242a;padding-bottom:56px">
+    <div style="padding:56px 48px 26px;display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-family:Gabarito,sans-serif;font-weight:800;font-size:30px;margin:0;letter-spacing:-.02em">Shop by category</h2><a href="#5b" style="font-weight:700;font-size:14px;color:#993331;text-decoration:none">Shop all →</a></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:255px;gap:0">
+      <a href="#5b" style="grid-column:1/3;grid-row:1/3;position:relative;text-decoration:none;overflow:hidden;background:#e7ddd0"><img src="uploads/pasted-1784525570971-0.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(28,23,20,.62),transparent 46%)"></div><div style="position:absolute;left:26px;right:26px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;color:#fff"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:28px;letter-spacing:-.02em;text-shadow:0 1px 12px rgba(0,0,0,.3)">Bongs</div><div style="font-size:12.5px;font-weight:800;letter-spacing:.02em;padding-bottom:5px;text-shadow:0 1px 8px rgba(0,0,0,.4)">124 products →</div></div></a>
+      <a href="#5b" style="grid-column:3/5;grid-row:1/2;position:relative;text-decoration:none;overflow:hidden;background:#e7ddd0"><img src="uploads/pasted-1784525603749-0.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(28,23,20,.62),transparent 46%)"></div><div style="position:absolute;left:26px;right:26px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;color:#fff"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:28px;letter-spacing:-.02em;text-shadow:0 1px 12px rgba(0,0,0,.3)">Vaporizers</div><div style="font-size:12.5px;font-weight:800;letter-spacing:.02em;padding-bottom:5px;text-shadow:0 1px 8px rgba(0,0,0,.4)">48 products →</div></div></a>
+      <a href="#5b" style="grid-column:3/4;grid-row:2/3;position:relative;text-decoration:none;overflow:hidden;background:#e7ddd0"><img src="uploads/pasted-1784525637780-0.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(28,23,20,.62),transparent 46%)"></div><div style="position:absolute;left:26px;right:26px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;color:#fff"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:28px;letter-spacing:-.02em;text-shadow:0 1px 12px rgba(0,0,0,.3)">Dab Rigs</div><div style="font-size:12.5px;font-weight:800;letter-spacing:.02em;padding-bottom:5px;text-shadow:0 1px 8px rgba(0,0,0,.4)">86 products →</div></div></a>
+      <a href="#5b" style="grid-column:4/5;grid-row:2/3;position:relative;text-decoration:none;overflow:hidden;background:#e7ddd0"><img src="uploads/pasted-1784525670701-0.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(28,23,20,.62),transparent 46%)"></div><div style="position:absolute;left:26px;right:26px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;color:#fff"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:28px;letter-spacing:-.02em;text-shadow:0 1px 12px rgba(0,0,0,.3)">Pens</div><div style="font-size:12.5px;font-weight:800;letter-spacing:.02em;padding-bottom:5px;text-shadow:0 1px 8px rgba(0,0,0,.4)">37 products →</div></div></a>
+      <a href="#5b" style="grid-column:1/3;grid-row:3/4;position:relative;text-decoration:none;overflow:hidden;background:#e7ddd0"><img src="uploads/pasted-1784525726506-0.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(28,23,20,.62),transparent 46%)"></div><div style="position:absolute;left:26px;right:26px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;color:#fff"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:28px;letter-spacing:-.02em;text-shadow:0 1px 12px rgba(0,0,0,.3)">Rolling</div><div style="font-size:12.5px;font-weight:800;letter-spacing:.02em;padding-bottom:5px;text-shadow:0 1px 8px rgba(0,0,0,.4)">92 products →</div></div></a>
+      <a href="#5b" style="grid-column:3/5;grid-row:3/4;position:relative;text-decoration:none;overflow:hidden;background:#e7ddd0"><img src="uploads/pasted-1784525697729-0.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(28,23,20,.62),transparent 46%)"></div><div style="position:absolute;left:26px;right:26px;bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;color:#fff"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:28px;letter-spacing:-.02em;text-shadow:0 1px 12px rgba(0,0,0,.3)">Accessories</div><div style="font-size:12.5px;font-weight:800;letter-spacing:.02em;padding-bottom:5px;text-shadow:0 1px 8px rgba(0,0,0,.4)">210 products →</div></div></a>
+    </div></div>
+<div style="background:#f2f0ee;padding:56px 48px">
+  <div style="position:relative;border-radius:28px;overflow:hidden;height:420px">
+    <video src="https://cdn.shopify.com/videos/c/vp/781efff97c2f484b84cacdbad283f730/781efff97c2f484b84cacdbad283f730.HD-720p-1.6Mbps-18625586.mp4" autoPlay muted loop playsInline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
+    <div style="position:absolute;inset:0;background:linear-gradient(105deg,rgba(28,23,20,.85) 30%,rgba(28,23,20,.15) 70%)"></div>
+    <div style="position:absolute;top:0;bottom:0;left:0;width:52%;padding:52px 56px;display:flex;flex-direction:column;justify-content:center;gap:16px;color:#f2ede8">
+      <div style="align-self:flex-start;background:#993331;color:#fff;border-radius:99px;font-size:11px;font-weight:800;padding:6px 14px;letter-spacing:.04em">SINCE 2006</div>
+      <h2 style="font-family:Gabarito,sans-serif;font-weight:800;font-size:46px;margin:0;letter-spacing:-.03em;line-height:1.02">Twenty years<br>at the torch.</h2>
+      <p style="font-size:15.5px;line-height:1.7;color:rgba(242,237,232,.85);margin:0;max-width:40ch">We started as borosilicate glassblowers. Every piece we stock today is something we'd keep on our own shelf.</p>
+      <a href="#5b" style="align-self:flex-start;margin-top:8px;background:#f2ede8;color:#1c1714;font-weight:700;font-size:15px;padding:14px 30px;border-radius:16px;text-decoration:none">Read our story</a>
+    </div>
+  </div>
+</div>
+<div style="background:#f2f0ee;padding:56px 48px;color:#22242a">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px"><h2 style="font-family:Gabarito,sans-serif;font-weight:800;font-size:30px;margin:0;letter-spacing:-.02em">Popular &amp; trending</h2><a href="#5b" style="font-weight:700;font-size:14px;color:#993331;text-decoration:none">Shop all →</a></div>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">
+    <div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><div style="aspect-ratio:1;background:#efe7dd;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/lookah-unicorn-electric-dab-rig.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">DAB RIG</div><div style="font-weight:700;font-size:15px;line-height:1.35">Lookah Unicorn E-Rig</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★★<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(212)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$189</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div><div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><div style="aspect-ratio:1;background:#f3e3d0;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/connect-glass-dab-rig-with-banger-and-carb-cap.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">DAB RIG</div><div style="font-weight:700;font-size:15px;line-height:1.35">Connect Glass Dab Rig</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★☆<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(58)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$79</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div><div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><div style="aspect-ratio:1;background:#eee9e0;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/nuff-life-glycerin-beaker-bong-blue_1.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">BONG</div><div style="font-weight:700;font-size:15px;line-height:1.35">Glycerin Beaker Bong</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★★<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(133)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$89</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div><div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><div style="aspect-ratio:1;background:#f1e6d6;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/photos-1784328340446.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">VAPORIZER</div><div style="font-weight:700;font-size:15px;line-height:1.35">Multivariant E-Vape</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★★<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(98)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$199</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div>
+  </div>
+  </div>
+</div>
+<div style="background:#f2f0ee;padding:56px 48px;color:#22242a">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px"><h2 style="font-family:Gabarito,sans-serif;font-weight:800;font-size:30px;margin:0;letter-spacing:-.02em">New products</h2><a href="#5b" style="font-weight:700;font-size:14px;color:#993331;text-decoration:none">Shop all →</a></div>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">
+    <div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><span style="position:absolute;top:14px;left:14px;background:#f8c913;color:#22242a;border-radius:99px;font-size:11px;font-weight:800;padding:4px 10px;z-index:2">NEW</span><div style="aspect-ratio:1;background:#efe7dd;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/chromskullbong.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">BONG</div><div style="font-weight:700;font-size:15px;line-height:1.35">Chrome Skull Bong</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★★<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(24)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$149</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div><div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><span style="position:absolute;top:14px;left:14px;background:#f8c913;color:#22242a;border-radius:99px;font-size:11px;font-weight:800;padding:4px 10px;z-index:2">NEW</span><div style="aspect-ratio:1;background:#f3e3d0;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/beehive-nano-rig-empire-glassworks.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">DAB RIG</div><div style="font-weight:700;font-size:15px;line-height:1.35">Beehive Nano Rig</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★☆<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(12)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$129</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div><div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><span style="position:absolute;top:14px;left:14px;background:#f8c913;color:#22242a;border-radius:99px;font-size:11px;font-weight:800;padding:4px 10px;z-index:2">NEW</span><div style="aspect-ratio:1;background:#eee9e0;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/empire-glassworks-dragon-sphere-mini-bong-front.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">BONG</div><div style="font-weight:700;font-size:15px;line-height:1.35">Dragon Sphere Mini Bong</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★★<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(31)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$95</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div><div style="background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-6px);box-shadow:0 18px 34px rgba(34,36,42,.15)"><span style="position:absolute;top:14px;left:14px;background:#f8c913;color:#22242a;border-radius:99px;font-size:11px;font-weight:800;padding:4px 10px;z-index:2">NEW</span><div style="aspect-ratio:1;background:#f1e6d6;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/pasted-1784342150041-0.png" alt="" style="max-height:80%;max-width:80%;object-fit:contain"></div><div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:7px;flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#b08a3c">VAPORIZER</div><div style="font-weight:700;font-size:15px;line-height:1.35">E-Vape Kit — Deep Blue</div><div style="font-size:12.5px;color:#c9a227;letter-spacing:1px">★★★★★<span style="color:#8a8e96;letter-spacing:0;margin-left:4px">(64)</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4px"><span style="font-family:Gabarito,sans-serif;font-weight:800;font-size:18px">$219</span><a href="#5b" style="text-decoration:none;background:#22242a;color:#fff;border-radius:12px;font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px" style-hover="background:#993331">Add +</a></div></div></div>
+  </div>
+  </div>
+</div>
+<div style="background:#f2f0ee;padding:56px 48px;color:#22242a">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px"><h2 style="font-family:Gabarito,sans-serif;font-weight:800;font-size:30px;margin:0;letter-spacing:-.02em">From the blog</h2><a href="#5b" style="font-weight:700;font-size:14px;color:#993331;text-decoration:none">All posts →</a></div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+    <a href="#5b" style="text-decoration:none;color:#22242a;background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column"><div style="aspect-ratio:16/9;background:#f3e3d0;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/photos-1784328340446.png" alt="" style="max-height:82%;max-width:82%;object-fit:contain"></div><div style="padding:18px 20px;display:flex;flex-direction:column;gap:8px"><div style="font-size:12px;font-weight:700;color:#8a8e96">Oct 03 · 6 min read</div><div style="font-weight:700;font-size:16px;line-height:1.4">Delta-8 vs. Delta-10 — the major difference</div></div></a>
+    <a href="#5b" style="text-decoration:none;color:#22242a;background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column"><div style="aspect-ratio:16/9;background:#e6ede2;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/pasted-1784342176659-0.png" alt="" style="max-height:82%;max-width:82%;object-fit:contain"></div><div style="padding:18px 20px;display:flex;flex-direction:column;gap:8px"><div style="font-size:12px;font-weight:700;color:#8a8e96">Aug 03 · 6 min read</div><div style="font-weight:700;font-size:16px;line-height:1.4">The best herbs to vaporize</div></div></a>
+    <a href="#5b" style="text-decoration:none;color:#22242a;background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column"><div style="aspect-ratio:16/9;background:#efe7dd;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="uploads/nuff-life-glycerin-beaker-bong-blue_1.png" alt="" style="max-height:82%;max-width:82%;object-fit:contain"></div><div style="padding:18px 20px;display:flex;flex-direction:column;gap:8px"><div style="font-size:12px;font-weight:700;color:#8a8e96">May 31 · 7 min read</div><div style="font-weight:700;font-size:16px;line-height:1.4">Bongs 101 — a beginner's guide</div></div></a>
+  </div>
+</div>
+<div style="background:#1c1714;color:#f2ede8;padding:72px 48px 0">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:40px;padding-bottom:44px">
+      <h2 style="font-family:Gabarito,sans-serif;font-weight:800;font-size:52px;margin:0;letter-spacing:-.03em;line-height:1">No fuss.<br>Just good <span style="color:#993331">gear</span>.</h2>
+      <p style="font-size:15px;line-height:1.7;color:#b7ada3;margin:0;max-width:40ch">Twenty years curating glass, vapes and rolling gear — priced fair, shipped discreet, backed by humans who actually pick up the phone.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #362e28">
+      <div style="padding:34px 28px 44px;border-right:1px solid #362e28"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:40px;letter-spacing:-.02em">$50+</div><div style="font-size:13px;color:#b7ada3;margin-top:8px;line-height:1.5">Free, discreet shipping. Plain box, every time.</div></div>
+      <div style="padding:34px 28px 44px;border-right:1px solid #362e28"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:40px;letter-spacing:-.02em">100%</div><div style="font-size:13px;color:#b7ada3;margin-top:8px;line-height:1.5">Lab-tested vapor path on every device we stock.</div></div>
+      <div style="padding:34px 28px 44px;border-right:1px solid #362e28"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:40px;letter-spacing:-.02em">30 day</div><div style="font-size:13px;color:#b7ada3;margin-top:8px;line-height:1.5">No-drama returns. Breakage in transit is on us.</div></div>
+      <div style="padding:34px 28px 44px"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:40px;letter-spacing:-.02em">20+ yrs</div><div style="font-size:13px;color:#b7ada3;margin-top:8px;line-height:1.5">Glassblowers first, headshop second. We know the gear.</div></div>
+    </div>
+  </div>
+<div style="background:#22242a;padding:40px 48px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:40px">
+    <div style="max-width:420px"><div style="font-family:Gabarito,sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;margin-bottom:8px">Vices, handled with care.</div><div style="font-size:14.5px;color:#8a8e96;line-height:1.6">Drops, deals, and the occasional bad influence — in your inbox, 21+ only.</div></div>
+    <div style="display:flex;gap:10px;flex:none"><div style="background:rgba(255,255,255,.08);border:1px solid #4a4d54;border-radius:16px;padding:14px 22px;font-size:14px;color:#8a8e96;width:240px">your@email.com</div><a href="#5b" style="background:#993331;color:#fff;font-weight:700;padding:14px 26px;border-radius:16px;text-decoration:none;font-size:14px">Join the cave</a></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;color:rgba(255,255,255,.75);font-size:13px;font-weight:600;padding:22px 48px;background:#1a1c21">
+    <span>© 2026 Dankcave · Adults 21+</span>
+    <div style="display:flex;gap:22px"><a href="#5b" style="text-decoration:none;color:rgba(255,255,255,.75)">Shipping</a><a href="#5b" style="text-decoration:none;color:rgba(255,255,255,.75)">Returns</a><a href="#5b" style="text-decoration:none;color:rgba(255,255,255,.75)">Privacy</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#f8c913&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Brand&quot;, &quot;options&quot;: [&quot;#f8c913&quot;, &quot;#993331&quot;, &quot;#e8871e&quot;, &quot;#993331&quot;]},
+  &quot;collectionsLayout&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;mosaic&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;mosaic&quot;, &quot;spaced grid&quot;, &quot;hidden&quot;], &quot;section&quot;: &quot;Collections&quot;},
+  &quot;collectionsRowHeight&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 200, &quot;min&quot;: 130, &quot;max&quot;: 280, &quot;step&quot;: 10, &quot;unit&quot;: &quot;px&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Collections&quot;},
+  &quot;showBlog&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;},
+  &quot;showNewsletter&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;}
+}">
+class Component extends DCLogic {
+  componentDidMount() {
+    this._vidTimer = setInterval(() => {
+      document.querySelectorAll('video').forEach(v => {
+        v.muted = true; v.loop = true;
+        if (v.paused) v.play().catch(() => {});
+      });
+    }, 1000);
+    this.applyTweaks();
+    this.initScrollReveal();
+  }
+  initScrollReveal() {
+    const card = document.querySelector('[data-screen-label="5b Homepage"]');
+    if (!card) return;
+    const targets = [];
+    // stagger cards/tiles within grids
+    card.querySelectorAll('[style*="minmax(0,1fr)"] > div, [style*="minmax(0,1fr)"] > a, [style*="grid-auto-rows"] > a').forEach((el, i) => {
+      targets.push({ el, d: (i % 4) * 70 });
+    });
+    targets.forEach(({ el }) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(40px) scale(.985)';
+      el.style.filter = 'blur(7px)';
+      el.style.transition = 'opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1), filter .9s cubic-bezier(.16,1,.3,1)';
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const d = Number(e.target.getAttribute('data-rd') || 0);
+          setTimeout(() => { e.target.style.opacity = '1'; e.target.style.transform = 'none'; e.target.style.filter = 'none'; }, d);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    targets.forEach(({ el, d }) => { el.setAttribute('data-rd', d); io.observe(el); });
+    this._io = io;
+  }
+  componentDidUpdate() { this.applyTweaks(); }
+  componentWillUnmount() { clearInterval(this._vidTimer); if (this._io) this._io.disconnect(); }
+  applyTweaks() {
+    const p = this.props || {};
+    const accent = p.accent || '#993331';
+    const root = document.body;
+    const tokens = ['#993331','#993331','#993331'];
+    root.querySelectorAll('[style]').forEach(el => {
+      const s = el.getAttribute('style') || '';
+      if (!tokens.some(t => s.includes(t))) return;
+      const bgHadToken = /background(-color)?\s*:[^;]*#993331/i.test(s);
+      let ns = s;
+      tokens.forEach(t => { ns = ns.split(t).join(accent); });
+      el.setAttribute('style', ns);
+      if (bgHadToken) el.style.color = '#fff';
+    });
+    const grids = root.querySelectorAll('[style*="grid-auto-rows"]');
+    grids.forEach(g => {
+      if (p.collectionsLayout === 'hidden') { g.style.display = 'none'; return; }
+      g.style.display = 'grid';
+      if (p.collectionsRowHeight) g.style.gridAutoRows = p.collectionsRowHeight + 'px';
+      g.style.gap = p.collectionsLayout === 'spaced grid' ? '14px' : '0px';
+      if (p.collectionsLayout === 'spaced grid') g.style.padding = '0 44px 24px';
+    });
+    const hide = (matchers, on) => {
+      document.querySelectorAll('h2').forEach(h => {
+        const t = (h.textContent || '').toLowerCase();
+        if (matchers.some(m => t.includes(m))) {
+          const sec = h.closest('div');
+          if (sec) sec.style.display = on ? '' : 'none';
+        }
+      });
+    };
+    hide(['from the blog','latest from the blog','reading for the rotation'], p.showBlog !== false);
+    hide(['get in the know','join the late crowd','vices, handled','become a dankcave vip'], p.showNewsletter !== false);
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

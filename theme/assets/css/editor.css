@@ -1,0 +1,6 @@
+/* -----------------------------------------------------------------------------
+   Block editor styles. Scopes the theme's design tokens into Gutenberg so
+   Dankcave block patterns render correctly during composition.
+   -------------------------------------------------------------------------- */
+
+/* Mirror the core :root tokens from theme.css so blocks render on-brand in the editor. */

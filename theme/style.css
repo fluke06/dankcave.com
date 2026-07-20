@@ -1,0 +1,17 @@
+/*
+Theme Name: Dankcave
+Theme URI: https://dankcave.com/
+Author: Christian Dizon
+Author URI: https://dankcave.com/
+Description: Custom WooCommerce theme for Dankcave.com. Editorial, premium smoke-shop e-commerce built from scratch, no page builder dependency. Full template set for shop, product, cart, checkout, my-account, blog, and static pages, plus a Gutenberg block pattern library so new campaign pages can be composed in the block editor using the same visual language.
+Version: 0.1.0
+Requires at least: 6.0
+Tested up to: 6.7
+Requires PHP: 8.1
+License: GPL v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: dankcave
+Tags: e-commerce, woocommerce, custom, block-patterns, editorial
+
+All actual CSS lives in assets/css/theme.css. This file is the WordPress theme header only.
+*/

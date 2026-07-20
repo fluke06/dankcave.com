@@ -1,0 +1,52 @@
+# Node / dev
+node_modules/
+.cache/
+.vitepress/dist/
+.vitepress/cache/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local env
+.env
+.env.local
+
+# Build artifacts
+*.zip
+dist/
+build/
+
+# Docker
+.docker/
+docker-data/
+
+# Logs
+*.log
+logs/
+
+# Secrets
+credentials.json
+*.pem
+*.key
+
+# Local WordPress + backup artifacts
+wp-config.php
+wp-content/uploads/
+wp-content/upgrade/
+*.sql
+*.sql.gz
+*.wpress
+
+# Temp
+tmp/
+*.tmp
+
+# macOS metadata
+._*

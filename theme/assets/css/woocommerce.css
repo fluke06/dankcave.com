@@ -1,0 +1,6 @@
+/* -----------------------------------------------------------------------------
+   WooCommerce-specific styles. Loaded conditionally when WooCommerce is active.
+   Populated as shop templates are built.
+   -------------------------------------------------------------------------- */
+
+/* Overrides for Woo's default styles to match the theme's design tokens. */

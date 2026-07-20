@@ -1,0 +1,23 @@
+/* -----------------------------------------------------------------------------
+   Font declarations.
+   Populate @font-face rules once fonts are downloaded into ./assets/fonts/.
+   Trim to only the fonts actually used per template (see CLAUDE.md § Design tokens).
+   -------------------------------------------------------------------------- */
+
+/* @font-face {
+	font-family: 'Gabarito';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('../fonts/gabarito-400.woff2') format('woff2');
+} */
+
+/* @font-face {
+	font-family: 'Gabarito';
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url('../fonts/gabarito-700.woff2') format('woff2');
+} */
+
+/* Instrument Serif, Bricolage Grotesque, Space Grotesk, etc. added the same way. */
