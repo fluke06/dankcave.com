@@ -128,6 +128,93 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		} );
 	} );
 
+	// Header search modal — full-screen overlay with a live REST product search.
+	const searchOpen  = document.querySelector( '[data-search-open]' );
+	const searchClose = document.querySelectorAll( '[data-search-close]' );
+	const searchModal = document.getElementById( 'search-modal' );
+	const searchInput = document.querySelector( '[data-search-input]' );
+	const searchResults = document.querySelector( '[data-search-results]' );
+	const searchHint  = document.querySelector( '[data-search-hint]' );
+
+	function openSearch() {
+		if ( ! searchModal ) return;
+		searchModal.hidden = false;
+		searchModal.setAttribute( 'aria-hidden', 'false' );
+		requestAnimationFrame( () => searchModal.setAttribute( 'data-open', 'true' ) );
+		document.body.classList.add( 'search-open' );
+		setTimeout( () => searchInput && searchInput.focus(), 60 );
+	}
+	function closeSearch() {
+		if ( ! searchModal ) return;
+		searchModal.removeAttribute( 'data-open' );
+		searchModal.setAttribute( 'aria-hidden', 'true' );
+		setTimeout( () => { searchModal.hidden = true; }, 200 );
+		document.body.classList.remove( 'search-open' );
+	}
+
+	if ( searchOpen && searchModal ) {
+		searchOpen.addEventListener( 'click', openSearch );
+	}
+	searchClose.forEach( btn => btn.addEventListener( 'click', closeSearch ) );
+	if ( searchModal ) {
+		searchModal.addEventListener( 'click', function ( e ) {
+			// Backdrop click closes; clicks on the inner card don't propagate through
+			if ( e.target === searchModal ) closeSearch();
+		} );
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key === 'Escape' && searchModal.getAttribute( 'data-open' ) === 'true' ) closeSearch();
+		} );
+	}
+
+	// Live-search: debounce on input and hit the WP REST wp/v2/search endpoint.
+	if ( searchInput && searchResults ) {
+		let debounceHandle = null;
+		let lastQuery = '';
+		async function runSearch( q ) {
+			if ( ! q || q.length < 2 ) {
+				searchResults.hidden = true;
+				searchResults.innerHTML = '';
+				if ( searchHint ) searchHint.hidden = false;
+				return;
+			}
+			if ( searchHint ) searchHint.hidden = true;
+			try {
+				const url = '/wp-json/wp/v2/search?type=post&subtype=product,post,page&per_page=8&search=' + encodeURIComponent( q );
+				const r = await fetch( url, { credentials: 'same-origin' } );
+				if ( ! r.ok ) { throw new Error( r.status ); }
+				const data = await r.json();
+				if ( q !== lastQuery ) return; // stale
+				if ( ! data.length ) {
+					searchResults.hidden = false;
+					searchResults.innerHTML = '<div class="search-modal-item" style="justify-content:center;color:rgba(255,255,255,.55)">No matches for &ldquo;' + escapeHtml( q ) + '&rdquo;. Try a broader term.</div>';
+					return;
+				}
+				searchResults.hidden = false;
+				searchResults.innerHTML = data.map( function ( it ) {
+					const meta = it.subtype === 'product' ? 'Product' : ( it.subtype === 'post' ? 'Article' : 'Page' );
+					// WP REST returns titles already HTML-entity encoded, so use as-is.
+					return '<a class="search-modal-item" href="' + escapeAttr( it.url ) + '">'
+						+ '<div class="search-modal-item__info">'
+						+ '<div class="search-modal-item__title">' + it.title + '</div>'
+						+ '<div class="search-modal-item__meta">' + meta + '</div>'
+						+ '</div></a>';
+				} ).join( '' );
+			} catch ( _err ) {
+				searchResults.hidden = false;
+				searchResults.innerHTML = '<div class="search-modal-item" style="justify-content:center;color:rgba(255,255,255,.55)">Search unavailable — press Enter to load results on the results page.</div>';
+			}
+		}
+		function escapeHtml( s ) {
+			return String( s ).replace( /[&<>"]/g, c => ( { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ c ] ) );
+		}
+		function escapeAttr( s ) { return escapeHtml( s ); }
+		searchInput.addEventListener( 'input', function ( e ) {
+			const q = e.target.value.trim();
+			lastQuery = q;
+			clearTimeout( debounceHandle );
+			debounceHandle = setTimeout( () => runSearch( q ), 220 );
+		} );
+	}
+
 	// TODO: Cart drawer open/close (when we build the mini-cart)
-	// TODO: Sticky header on scroll (if design calls for it)
 } );

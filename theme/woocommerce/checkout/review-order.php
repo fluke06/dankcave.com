@@ -102,39 +102,14 @@ defined( 'ABSPATH' ) || exit;
 		<?php do_action( 'woocommerce_review_order_after_order_total' ); ?>
 	</div>
 
-	<div class="dc-review__payment" id="payment">
-		<?php if ( WC()->cart->needs_payment() ) : ?>
-			<ul class="wc_payment_methods payment_methods methods">
-				<?php
-				$available_gateways = WC()->payment_gateways()->get_available_payment_gateways();
-				if ( ! empty( $available_gateways ) ) {
-					foreach ( $available_gateways as $gateway ) {
-						wc_get_template( 'checkout/payment-method.php', array( 'gateway' => $gateway ) );
-					}
-				} else {
-					echo '<li class="woocommerce-notice woocommerce-notice--info woocommerce-info">' . esc_html( apply_filters( 'woocommerce_no_available_payment_methods_message', WC()->customer->get_billing_country() ? __( 'Sorry, it seems that there are no available payment methods for your state. Please contact us if you require assistance or wish to make alternate arrangements.', 'woocommerce' ) : __( 'Please fill in your details above to see available payment methods.', 'woocommerce' ) ) ) . '</li>';
-				}
-				?>
-			</ul>
-		<?php endif; ?>
-
-		<div class="dc-review__place-order form-row place-order">
-			<noscript>
-				<?php esc_html_e( 'Since your browser does not support JavaScript, or it is disabled, please ensure you click the &lt;em&gt;Update Totals&lt;/em&gt; button before placing your order. You may be charged more than the amount stated above if you fail to do so.', 'woocommerce' ); ?>
-				<br /><button type="submit" class="button alt<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="woocommerce_checkout_update_totals" value="<?php esc_attr_e( 'Update totals', 'woocommerce' ); ?>"><?php esc_html_e( 'Update totals', 'woocommerce' ); ?></button>
-			</noscript>
-
-			<?php wc_get_template( 'checkout/terms.php' ); ?>
-
-			<?php do_action( 'woocommerce_review_order_before_submit' ); ?>
-
-			<?php echo apply_filters( 'woocommerce_order_button_html', '<button type="submit" class="button alt dc-review__submit' . esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ) . '" name="woocommerce_checkout_place_order" id="place_order" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">' . esc_html( $order_button_text ) . '</button>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-
-			<?php do_action( 'woocommerce_review_order_after_submit' ); ?>
-
-			<?php wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' ); ?>
-		</div>
-	</div>
+	<?php
+	/**
+	 * Payment methods + place-order button are rendered by WooCommerce's default
+	 * `checkout/payment.php` template which fires on `woocommerce_checkout_order_review`
+	 * at priority 20 (right after this review-order at priority 10). Do NOT render
+	 * them inline here — that produces duplicate payment method lists.
+	 */
+	?>
 
 	<div class="dc-review__trust">
 		<span>🔒 <?php esc_html_e( 'Secure', 'dankcave' ); ?></span>
