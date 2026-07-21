@@ -248,5 +248,64 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		} );
 	} );
 
-	// TODO: Cart drawer open/close (when we build the mini-cart)
+	// Cart drawer — slides in from the right on cart click or after AJAX add.
+	const drawer = document.getElementById( 'dc-cart-drawer' );
+	function openDrawer() {
+		if ( ! drawer ) return;
+		drawer.hidden = false;
+		drawer.setAttribute( 'aria-hidden', 'false' );
+		requestAnimationFrame( () => drawer.setAttribute( 'data-open', 'true' ) );
+		document.body.classList.add( 'dc-drawer-open' );
+	}
+	function closeDrawer() {
+		if ( ! drawer ) return;
+		drawer.removeAttribute( 'data-open' );
+		drawer.setAttribute( 'aria-hidden', 'true' );
+		setTimeout( () => { drawer.hidden = true; }, 320 );
+		document.body.classList.remove( 'dc-drawer-open' );
+	}
+	if ( drawer ) {
+		document.querySelectorAll( '[data-dc-drawer-close]' ).forEach( el => el.addEventListener( 'click', closeDrawer ) );
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key === 'Escape' && drawer.getAttribute( 'data-open' ) === 'true' ) closeDrawer();
+		} );
+	}
+
+	// Cart pill in header opens the drawer instead of navigating (unless
+	// Cmd/Ctrl-clicked — allow normal open-in-tab behaviour).
+	const cartPill = document.querySelector( '.cart-summary' );
+	if ( cartPill && drawer ) {
+		cartPill.addEventListener( 'click', function ( e ) {
+			if ( e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0 ) return;
+			e.preventDefault();
+			openDrawer();
+		} );
+	}
+
+	// After WooCommerce completes an AJAX add-to-cart, open the drawer.
+	if ( window.jQuery ) {
+		window.jQuery( document.body ).on( 'added_to_cart', function () { openDrawer(); } );
+		// Removal from inside the drawer — hook a click on remove links and
+		// call the wc-ajax=remove_from_cart endpoint so the drawer updates in place.
+		document.addEventListener( 'click', function ( e ) {
+			const remove = e.target.closest( '.dc-cart-drawer-item__remove' );
+			if ( ! remove ) return;
+			e.preventDefault();
+			const href = remove.getAttribute( 'href' );
+			// hit the URL then trigger a fragments refresh
+			fetch( href, { credentials: 'same-origin' } ).then( () => {
+				window.jQuery.ajax( {
+					type: 'post',
+					url: ( window.wc_cart_fragments_params && window.wc_cart_fragments_params.wc_ajax_url ) ? window.wc_cart_fragments_params.wc_ajax_url.replace( '%%endpoint%%', 'get_refreshed_fragments' ) : '/?wc-ajax=get_refreshed_fragments',
+					success: function ( data ) {
+						if ( data && data.fragments ) {
+							window.jQuery.each( data.fragments, function ( key, value ) {
+								window.jQuery( key ).replaceWith( value );
+							} );
+						}
+					},
+				} );
+			} );
+		} );
+	}
 } );

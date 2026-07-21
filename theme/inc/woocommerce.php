@@ -129,6 +129,96 @@ function dankcave_checkout_inline_login( $checkout ) {
 	<?php
 }
 
+// -----------------------------------------------------------------------------
+// Cart drawer (right-side slide-in). Renders its own contents via helper fns so
+// the same markup can be re-rendered inside woocommerce_add_to_cart_fragments
+// after an AJAX add-to-cart.
+// -----------------------------------------------------------------------------
+
+function dankcave_render_cart_drawer_contents() {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart ) { return; }
+	$items = WC()->cart->get_cart();
+	if ( empty( $items ) ) {
+		?>
+		<div class="dc-cart-drawer__empty">
+			<p><?php esc_html_e( 'Your bag is empty.', 'dankcave' ); ?></p>
+			<a class="dc-cart-drawer__empty-cta" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>"><?php esc_html_e( 'Start shopping', 'dankcave' ); ?></a>
+		</div>
+		<?php
+		return;
+	}
+	?>
+	<ul class="dc-cart-drawer__items">
+		<?php foreach ( $items as $key => $item ) :
+			$product = apply_filters( 'woocommerce_cart_item_product', $item['data'], $item, $key );
+			if ( ! $product || ! $product->exists() ) { continue; }
+			$name      = apply_filters( 'woocommerce_cart_item_name', $product->get_name(), $item, $key );
+			$permalink = $product->is_visible() ? $product->get_permalink( $item ) : '';
+			$attrs     = wc_get_formatted_cart_item_data( $item );
+			$remove_url = wc_get_cart_remove_url( $key );
+			?>
+			<li class="dc-cart-drawer-item">
+				<div class="dc-cart-drawer-item__thumb">
+					<div class="dc-cart-drawer-item__thumb-media">
+						<?php echo $product->get_image( 'woocommerce_thumbnail' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					</div>
+					<span class="dc-cart-drawer-item__qty"><?php echo (int) $item['quantity']; ?></span>
+				</div>
+				<div class="dc-cart-drawer-item__info">
+					<div class="dc-cart-drawer-item__name">
+						<?php if ( $permalink ) : ?>
+							<a href="<?php echo esc_url( $permalink ); ?>"><?php echo wp_kses_post( $name ); ?></a>
+						<?php else : ?>
+							<?php echo wp_kses_post( $name ); ?>
+						<?php endif; ?>
+					</div>
+					<?php if ( $attrs ) : ?>
+						<div class="dc-cart-drawer-item__attrs"><?php echo wp_kses_post( $attrs ); ?></div>
+					<?php endif; ?>
+					<div class="dc-cart-drawer-item__meta">
+						<span class="dc-cart-drawer-item__price"><?php echo wp_kses_post( WC()->cart->get_product_subtotal( $product, $item['quantity'] ) ); ?></span>
+						<a class="dc-cart-drawer-item__remove" href="<?php echo esc_url( $remove_url ); ?>" data-product_id="<?php echo esc_attr( $product->get_id() ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Remove %s from cart', 'dankcave' ), wp_strip_all_tags( $name ) ) ); ?>"><?php esc_html_e( 'Remove', 'dankcave' ); ?></a>
+					</div>
+				</div>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+	<?php
+}
+
+function dankcave_render_cart_drawer_footer() {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart || 0 === WC()->cart->get_cart_contents_count() ) { return; }
+	$subtotal = WC()->cart->get_cart_subtotal();
+	?>
+	<div class="dc-cart-drawer__subtotal">
+		<span><?php esc_html_e( 'Subtotal', 'dankcave' ); ?></span>
+		<span class="dc-cart-drawer__subtotal-val"><?php echo wp_kses_post( $subtotal ); ?></span>
+	</div>
+	<a class="dc-cart-drawer__cta dc-cart-drawer__cta--primary" href="<?php echo esc_url( wc_get_checkout_url() ); ?>"><?php esc_html_e( 'Checkout', 'dankcave' ); ?></a>
+	<a class="dc-cart-drawer__cta dc-cart-drawer__cta--secondary" href="<?php echo esc_url( wc_get_cart_url() ); ?>"><?php esc_html_e( 'View cart', 'dankcave' ); ?></a>
+	<?php
+}
+
+/**
+ * Push updated drawer HTML into the AJAX fragments response so the drawer
+ * refreshes automatically after adding to cart / removing without a page reload.
+ */
+add_filter( 'woocommerce_add_to_cart_fragments', 'dankcave_cart_drawer_fragments' );
+function dankcave_cart_drawer_fragments( $fragments ) {
+	ob_start();
+	dankcave_render_cart_drawer_contents();
+	$fragments['div[data-dc-drawer-contents]'] = '<div class="dc-cart-drawer__contents" data-dc-drawer-contents>' . ob_get_clean() . '</div>';
+
+	ob_start();
+	dankcave_render_cart_drawer_footer();
+	$fragments['footer[data-dc-drawer-foot]'] = '<footer class="dc-cart-drawer__foot" data-dc-drawer-foot>' . ob_get_clean() . '</footer>';
+
+	$count = WC()->cart->get_cart_contents_count();
+	$fragments['span[data-dc-drawer-count]'] = '<span class="dc-cart-drawer__count" data-dc-drawer-count>' . (int) $count . '</span>';
+	$fragments['span[data-cart-count]']      = '<span class="cart-summary__count" data-cart-count>' . (int) $count . '</span>';
+	return $fragments;
+}
+
 // Coupon field inline in the order review sidebar
 add_action( 'woocommerce_review_order_after_order_total', 'dankcave_checkout_inline_coupon', 20 );
 function dankcave_checkout_inline_coupon() {

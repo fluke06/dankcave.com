@@ -10,6 +10,8 @@
 	<?php get_template_part( 'template-parts/footer/newsletter-band' ); ?>
 	<?php get_template_part( 'template-parts/footer/legal-bar' ); ?>
 
+	<?php if ( function_exists( 'WC' ) ) { get_template_part( 'template-parts/cart/drawer' ); } ?>
+
 	<?php wp_footer(); ?>
 </body>
 </html>
