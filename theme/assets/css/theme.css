@@ -1470,11 +1470,9 @@ body.nav-open { overflow: hidden; }
 .pdp-gallery__hero {
 	border-radius: 26px;
 	aspect-ratio: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	overflow: hidden;
 	position: relative;
+	background: #fff;
 }
 .pdp-gallery__badge {
 	position: absolute;
@@ -1490,9 +1488,12 @@ body.nav-open { overflow: hidden; }
 	z-index: 2;
 }
 .pdp-gallery__image {
-	max-height: 78%;
-	max-width: 78%;
-	object-fit: contain;
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
 }
 
 /* Summary */

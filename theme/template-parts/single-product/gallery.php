@@ -25,20 +25,6 @@ if ( $product->is_featured() ) {
 	$badge = '';
 }
 
-// Deterministic pastel well matching product-card palette.
-$palettes = array(
-	array( '#fbeef4', '#efe7dd' ),
-	array( '#e6efe1', '#efe7dd' ),
-	array( '#f3e3d0', '#efe7dd' ),
-	array( '#e2e6f1', '#efe7dd' ),
-	array( '#efe7dd', '#e2ded3' ),
-	array( '#dfead4', '#e9e2d3' ),
-	array( '#eee9e0', '#e0d9cc' ),
-	array( '#f0e6d9', '#e5dfd0' ),
-);
-$palette = $palettes[ abs( crc32( (string) $product->get_id() ) ) % count( $palettes ) ];
-$hero_bg = sprintf( 'radial-gradient(420px 380px at 55%% 45%%,%s,%s)', $palette[0], $palette[1] );
-
 $hero_url = $main_id
 	? wp_get_attachment_image_url( $main_id, 'large' )
 	: wc_placeholder_img_src( 'large' );
@@ -61,7 +47,7 @@ $hero_url = $main_id
 		</div>
 	<?php endif; ?>
 
-	<div class="pdp-gallery__hero" style="background: <?php echo esc_attr( $hero_bg ); ?>;">
+	<div class="pdp-gallery__hero">
 		<?php if ( $badge ) : ?>
 			<span class="pdp-gallery__badge"><?php echo esc_html( $badge ); ?></span>
 		<?php endif; ?>
