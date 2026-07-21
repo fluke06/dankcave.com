@@ -31,49 +31,34 @@ function dankcave_register_patterns() {
 		return;
 	}
 
-	// Patterns to build (see CLAUDE.md § Scope):
-	// 1.  hero              — Big display type + product cutout
-	// 2.  product-grid-4    — Product cards, 4-up, pastel backgrounds
-	// 3.  category-grid-5   — Category tiles, lifestyle photography
-	// 4.  editorial-band    — Image + overlay text storytelling
-	// 5.  product-row       — "Popular / Trending / New" row with See all →
-	// 6.  blog-row          — 3-up blog card row
-	// 7.  black-cta-band    — "No fuss. Just good gear." band
-	// 8.  stats-row         — $50+, 100%, 30 day, 20+ yrs
-	// 9.  newsletter-band   — Black band with MC4WP form
-	// 10. section-header    — Eyebrow + headline used above each section
-	// 11. content-hero      — Simple page hero (About/Contact/legal)
-	//
-	// Each pattern's block markup lives in patterns/<name>.php as a returned string.
-	// Uncomment the loop below once individual pattern files exist.
+	$patterns = array(
+		'hero'            => array( 'title' => __( 'Hero — Broken Headline',   'dankcave' ), 'description' => __( 'Big display type with CTA row. Best used at the very top of the home page.', 'dankcave' ), 'keywords' => array( 'hero', 'headline', 'landing' ) ),
+		'editorial-band'  => array( 'title' => __( 'Editorial Band',           'dankcave' ), 'description' => __( 'Dark two-column band with image and story copy.', 'dankcave' ), 'keywords' => array( 'editorial', 'story', 'band' ) ),
+		'product-row'     => array( 'title' => __( 'Product Row + See All',    'dankcave' ), 'description' => __( 'Product row using the WooCommerce shortcode with a titled section head.', 'dankcave' ), 'keywords' => array( 'products', 'shop', 'row' ) ),
+		'blog-row'        => array( 'title' => __( 'Blog Card Row (3-up)',     'dankcave' ), 'description' => __( 'Three recent posts styled as blog cards. Uses the Query Loop block so it stays current.', 'dankcave' ), 'keywords' => array( 'blog', 'journal', 'query loop' ) ),
+		'black-cta-band'  => array( 'title' => __( 'Black CTA Band',           'dankcave' ), 'description' => __( 'Full-width black band with headline and CTA. Good closer.', 'dankcave' ), 'keywords' => array( 'cta', 'band', 'closing' ) ),
+		'stats-row'       => array( 'title' => __( 'Stats Row',                'dankcave' ), 'description' => __( 'Four-column stats row: shipping, verification, returns, tenure.', 'dankcave' ), 'keywords' => array( 'stats', 'trust', 'numbers' ) ),
+		'newsletter-band' => array( 'title' => __( 'Newsletter Subscribe',     'dankcave' ), 'description' => __( 'Dark newsletter band with MC4WP shortcode placeholder.', 'dankcave' ), 'keywords' => array( 'newsletter', 'subscribe', 'email' ) ),
+		'section-header'  => array( 'title' => __( 'Section Header + Eyebrow', 'dankcave' ), 'description' => __( 'Reusable eyebrow + headline + link row for above any grid.', 'dankcave' ), 'keywords' => array( 'section', 'header', 'eyebrow' ) ),
+		'content-hero'    => array( 'title' => __( 'Content Page Hero',        'dankcave' ), 'description' => __( 'Simple page hero for About, Contact, and legal pages.', 'dankcave' ), 'keywords' => array( 'about', 'page', 'hero' ) ),
+	);
 
-	// $patterns = array(
-	// 	'hero'            => __( 'Hero — Broken Headline',   'dankcave' ),
-	// 	'product-grid-4'  => __( 'Product Grid (4-up)',      'dankcave' ),
-	// 	'category-grid-5' => __( 'Category Grid (5-cell)',   'dankcave' ),
-	// 	'editorial-band'  => __( 'Editorial Storytelling',   'dankcave' ),
-	// 	'product-row'     => __( 'Product Row + See All',    'dankcave' ),
-	// 	'blog-row'        => __( 'Blog Card Row (3-up)',     'dankcave' ),
-	// 	'black-cta-band'  => __( 'Black CTA Band',           'dankcave' ),
-	// 	'stats-row'       => __( 'Stats Row',                'dankcave' ),
-	// 	'newsletter-band' => __( 'Newsletter Subscribe',     'dankcave' ),
-	// 	'section-header'  => __( 'Section Header + Eyebrow', 'dankcave' ),
-	// 	'content-hero'    => __( 'Content Page Hero',        'dankcave' ),
-	// );
-	// foreach ( $patterns as $slug => $title ) {
-	// 	$file = DANKCAVE_DIR . 'patterns/' . $slug . '.php';
-	// 	if ( ! file_exists( $file ) ) {
-	// 		continue;
-	// 	}
-	// 	$content = require $file;
-	// 	register_block_pattern(
-	// 		'dankcave/' . $slug,
-	// 		array(
-	// 			'title'      => $title,
-	// 			'categories' => array( 'dankcave' ),
-	// 			'content'    => $content,
-	// 		)
-	// 	);
-	// }
+	foreach ( $patterns as $slug => $meta ) {
+		$file = DANKCAVE_DIR . 'patterns/' . $slug . '.php';
+		if ( ! file_exists( $file ) ) {
+			continue;
+		}
+		$content = require $file;
+		register_block_pattern(
+			'dankcave/' . $slug,
+			array(
+				'title'       => $meta['title'],
+				'description' => isset( $meta['description'] ) ? $meta['description'] : '',
+				'keywords'    => isset( $meta['keywords'] ) ? $meta['keywords'] : array(),
+				'categories'  => array( 'dankcave' ),
+				'content'     => $content,
+			)
+		);
+	}
 }
 add_action( 'init', 'dankcave_register_patterns' );
