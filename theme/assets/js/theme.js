@@ -40,7 +40,22 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		} );
 	}
 
+	// PDP: swap hero image when a thumbnail is clicked.
+	const pdpHero = document.querySelector( '[data-pdp-hero]' );
+	const pdpThumbs = document.querySelectorAll( '.pdp-gallery__thumb' );
+	if ( pdpHero && pdpThumbs.length ) {
+		pdpThumbs.forEach( function ( thumb ) {
+			thumb.addEventListener( 'click', function () {
+				const full = thumb.getAttribute( 'data-full' );
+				if ( full ) {
+					pdpHero.src = full;
+				}
+				pdpThumbs.forEach( function ( t ) { t.classList.remove( 'is-active' ); } );
+				thumb.classList.add( 'is-active' );
+			} );
+		} );
+	}
+
 	// TODO: Cart drawer open/close (when we build the mini-cart)
-	// TODO: Product image gallery swap
 	// TODO: Sticky header on scroll (if design calls for it)
 } );
