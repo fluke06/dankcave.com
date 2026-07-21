@@ -217,10 +217,9 @@ p { margin: 0 0 var(--sp-4); }
 	display: flex;
 	align-items: center;
 	gap: var(--sp-3);
-	padding: 26px var(--wrap-pad) 0;
-	max-width: 1440px;
+	padding: 26px var(--gutter-x) 0;
 	margin: 0 auto;
-	justify-content: center;
+	justify-content: space-between;
 }
 .site-brand {
 	flex: none;
