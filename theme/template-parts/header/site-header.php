@@ -40,11 +40,19 @@ $cart_url = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url(
 			?>
 		</nav>
 
-		<a class="cart-summary" href="<?php echo esc_url( $cart_url ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'dankcave' ); ?>">
-			<span class="cart-summary__label"><?php esc_html_e( 'Bag', 'dankcave' ); ?></span>
-			<span class="cart-summary__sep" aria-hidden="true">·</span>
-			<span class="cart-summary__count" data-cart-count><?php echo esc_html( $cart_count ); ?></span>
-		</a>
+		<div class="site-header__actions">
+			<a class="header-search-pill" href="<?php echo esc_url( home_url( '/?s=' ) ); ?>" aria-label="<?php esc_attr_e( 'Search', 'dankcave' ); ?>">
+				<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false">
+					<circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+					<line x1="13.5" y1="13.5" x2="17.5" y2="17.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></line>
+				</svg>
+			</a>
+			<a class="cart-summary" href="<?php echo esc_url( $cart_url ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'dankcave' ); ?>">
+				<span class="cart-summary__label"><?php esc_html_e( 'Bag', 'dankcave' ); ?></span>
+				<span class="cart-summary__sep" aria-hidden="true">·</span>
+				<span class="cart-summary__count" data-cart-count><?php echo esc_html( $cart_count ); ?></span>
+			</a>
+		</div>
 
 		<button class="site-header__toggle" type="button" aria-controls="primary-nav-mobile" aria-expanded="false">
 			<span class="visually-hidden"><?php esc_html_e( 'Menu', 'dankcave' ); ?></span>
