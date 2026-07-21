@@ -566,30 +566,34 @@ body.nav-open { overflow: hidden; }
 }
 .hero__cta {
 	display: inline-flex;
-	align-items: center;
+	align-items: stretch;
 	gap: 0;
 	text-decoration: none;
 	transition: transform .18s ease;
+	line-height: 1;
 }
 .hero__cta:hover {
 	transform: translateY(-1px);
 	opacity: 1;
 }
+.hero__cta-label,
+.hero__cta-arrow {
+	display: inline-flex;
+	align-items: center;
+	line-height: 1;
+	font-size: 16px;
+	color: var(--white);
+}
 .hero__cta-label {
 	background: var(--ink-4);
-	color: var(--white);
 	font-weight: 600;
-	font-size: 16px;
-	padding: 16px 28px;
+	padding: 18px 28px;
 	border-radius: 16px 0 0 16px;
 }
 .hero__cta-arrow {
 	background: var(--accent-wine);
-	color: var(--white);
-	padding: 16px 20px;
+	padding: 18px 20px;
 	border-radius: 0 16px 16px 0;
-	font-size: 16px;
-	line-height: 1;
 }
 .hero__lede {
 	font-size: 14.5px;
@@ -694,14 +698,19 @@ body.nav-open { overflow: hidden; }
 	display: flex;
 	flex-direction: column;
 	position: relative;
-	text-decoration: none;
 	color: inherit;
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .product-card:hover {
 	transform: translateY(-6px);
 	box-shadow: 0 18px 34px rgba(34, 36, 42, 0.15);
-	opacity: 1;
+}
+.product-card__link {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	text-decoration: none;
+	color: inherit;
 }
 .product-card__badge {
 	position: absolute;
@@ -718,21 +727,22 @@ body.nav-open { overflow: hidden; }
 }
 .product-card__well {
 	aspect-ratio: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	background: #fff;
 	overflow: hidden;
+	position: relative;
 }
 .product-card__well img {
-	max-height: 80%;
-	max-width: 80%;
-	object-fit: contain;
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 	transition: transform 0.3s ease;
 }
 .product-card:hover .product-card__well img { transform: scale(1.04); }
 
 .product-card__body {
-	padding: 16px 18px 18px;
+	padding: 16px 18px 12px;
 	display: flex;
 	flex-direction: column;
 	gap: 7px;
@@ -768,8 +778,8 @@ body.nav-open { overflow: hidden; }
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: auto;
-	padding-top: 4px;
+	gap: 12px;
+	padding: 0 18px 18px;
 }
 .product-card__price {
 	font-family: var(--font-body);
@@ -4011,17 +4021,6 @@ body.single {
 	text-decoration: underline !important;
 }
 
-/* Fallback placeholder for empty product wells (no featured image) */
-.product-card__well:empty::before,
-.blog-card__well:empty::before,
-.dc-review-item__thumb:has(img[src=""])::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	background:
-		linear-gradient(135deg, transparent 47%, rgba(34, 36, 42, .06) 48%, rgba(34, 36, 42, .06) 52%, transparent 53%),
-		linear-gradient(45deg, transparent 47%, rgba(34, 36, 42, .06) 48%, rgba(34, 36, 42, .06) 52%, transparent 53%);
-}
 
 /* -----------------------------------------------------------------------------
    Cart & checkout polish (round 2)
@@ -4144,23 +4143,61 @@ button.dc-cart__update {
 	border-color: var(--ink-4) !important;
 }
 
-/* Product card empty well: SVG image placeholder */
-.product-card__well {
-	position: relative;
+
+/* -----------------------------------------------------------------------------
+   Button audit round 3 — kill remaining plugin CSS bleed
+----------------------------------------------------------------------------- */
+
+/* PDP add-to-cart — WC ships this as purple by default; force our ink pill.
+   We use the maximum specificity chain WooCommerce uses. */
+.woocommerce div.product form.cart .button,
+.woocommerce div.product form.cart button.single_add_to_cart_button,
+form.cart button.single_add_to_cart_button,
+button.single_add_to_cart_button.button.alt,
+button.single_add_to_cart_button {
+	background: var(--ink-4) !important;
+	background-color: var(--ink-4) !important;
+	color: #fff !important;
+	border-radius: 14px !important;
+	padding: 16px 24px !important;
+	font-weight: 700 !important;
+	font-size: 15px !important;
+	letter-spacing: .04em !important;
+	border: 0 !important;
+	text-transform: none !important;
 }
-.product-card__well::after {
-	content: "";
-	position: absolute;
-	inset: 30% 30% 30% 30%;
-	background:
-		radial-gradient(circle at 30% 40%, rgba(34, 36, 42, .08) 0 24%, transparent 24%),
-		linear-gradient(135deg, transparent 55%, rgba(34, 36, 42, .06) 55% 60%, transparent 60%);
-	opacity: 1;
-	pointer-events: none;
-	transition: opacity .18s;
+.woocommerce div.product form.cart .button:hover,
+.woocommerce div.product form.cart button.single_add_to_cart_button:hover,
+form.cart button.single_add_to_cart_button:hover,
+button.single_add_to_cart_button.button.alt:hover,
+button.single_add_to_cart_button:hover,
+button.single_add_to_cart_button:focus {
+	background: var(--accent-wine) !important;
+	background-color: var(--accent-wine) !important;
+	color: #fff !important;
 }
-.product-card__well img {
-	position: relative;
-	z-index: 1;
+
+/* Cart remove — WooCommerce sets a.remove{color:#a00}. Kill that with a more
+   specific selector. */
+.dc-cart-line a.dc-cart-line__remove,
+.dc-cart-line a.dc-cart-line__remove:link,
+.dc-cart-line a.dc-cart-line__remove:visited,
+.woocommerce-cart-form .dc-cart-line a.remove,
+a.dc-cart-line__remove.remove {
+	color: var(--muted-3) !important;
+	background: transparent !important;
+	font-size: 12.5px !important;
+	font-weight: 400 !important;
+	text-decoration: underline !important;
+	text-underline-offset: 2px !important;
+	padding: 0 !important;
+	border: 0 !important;
+	line-height: 1 !important;
+	width: auto !important;
+	height: auto !important;
 }
-.product-card__well:has(img):after { opacity: 0; }
+.dc-cart-line a.dc-cart-line__remove:hover,
+.woocommerce-cart-form .dc-cart-line a.remove:hover {
+	color: var(--accent-wine) !important;
+	background: transparent !important;
+}
