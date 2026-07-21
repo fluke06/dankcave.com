@@ -14,13 +14,13 @@ $cart_url = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url(
 ?>
 <header class="site-header" role="banner">
 	<div class="site-header__inner">
-		<a class="site-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
-			<?php if ( has_custom_logo() ) : ?>
-				<?php the_custom_logo(); ?>
-			<?php else : ?>
+		<?php if ( has_custom_logo() ) : ?>
+			<div class="site-brand site-brand--logo"><?php the_custom_logo(); ?></div>
+		<?php else : ?>
+			<a class="site-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
 				<span class="site-brand__text"><?php bloginfo( 'name' ); ?></span>
-			<?php endif; ?>
-		</a>
+			</a>
+		<?php endif; ?>
 
 		<nav class="primary-nav" aria-label="<?php esc_attr_e( 'Primary', 'dankcave' ); ?>">
 			<?php
