@@ -30,10 +30,9 @@ $cart_url = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url(
 				'menu_class'     => 'primary-nav__list',
 				'fallback_cb'    => function () {
 					echo '<ul class="primary-nav__list">';
-					printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/shop/' ) ),      esc_html__( 'Shop', 'dankcave' ) );
-					printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/collections/' ) ), esc_html__( 'Collections', 'dankcave' ) );
-					printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/blog/' ) ),      esc_html__( 'Journal', 'dankcave' ) );
-					printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/about/' ) ),     esc_html__( 'About', 'dankcave' ) );
+					printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/shop/' ) ),  esc_html__( 'Shop', 'dankcave' ) );
+					printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/blog/' ) ),  esc_html__( 'Journal', 'dankcave' ) );
+					printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/about/' ) ), esc_html__( 'About', 'dankcave' ) );
 					echo '</ul>';
 				},
 				'depth'          => 1,
