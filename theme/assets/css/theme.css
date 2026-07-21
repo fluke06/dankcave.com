@@ -2331,6 +2331,25 @@ form.checkout label {
 .dc-account .woocommerce-input-wrapper,
 .dc-cart .woocommerce-input-wrapper { display: block; width: 100%; }
 
+/* Higher-specificity selector chain that beats WooCommerce's
+   .woocommerce form .form-row .input-text (0,3,2 specificity). We match on
+   .woocommerce + .dc-* + form + .form-row + .input-text (0,4,2) so ours wins. */
+.woocommerce .dc-checkout form.checkout .form-row input.input-text,
+.woocommerce .dc-checkout form.checkout .form-row input[type="text"],
+.woocommerce .dc-checkout form.checkout .form-row input[type="email"],
+.woocommerce .dc-checkout form.checkout .form-row input[type="password"],
+.woocommerce .dc-checkout form.checkout .form-row input[type="tel"],
+.woocommerce .dc-checkout form.checkout .form-row input[type="number"],
+.woocommerce .dc-checkout form.checkout .form-row textarea,
+.woocommerce .dc-checkout form.checkout .form-row select,
+.woocommerce .dc-checkout form.checkout .form-row .select2-selection,
+.woocommerce .dc-account form .form-row input.input-text,
+.woocommerce .dc-account form .form-row input[type="text"],
+.woocommerce .dc-account form .form-row input[type="email"],
+.woocommerce .dc-account form .form-row input[type="password"],
+.woocommerce .dc-account form .form-row input[type="tel"],
+.woocommerce .dc-account form .form-row textarea,
+.woocommerce .dc-account form .form-row select,
 .dc-checkout input.input-text,
 .dc-checkout input[type="text"],
 .dc-checkout input[type="email"],
@@ -2351,17 +2370,18 @@ form.checkout label {
 .dc-cart input[type="text"]:not([name="coupon_code"]),
 .dc-cart input[type="email"] {
 	appearance: none;
-	background: #fff;
-	border: 1px solid #dcd7cd;
-	border-radius: 12px;
-	padding: 14px 16px;
-	font-family: inherit;
-	font-size: 14px;
-	color: var(--ink-4);
-	width: 100%;
-	box-sizing: border-box;
-	line-height: 1.4;
-	display: block;
+	background: #fff !important;
+	border: 1px solid #dcd7cd !important;
+	border-radius: 12px !important;
+	padding: 14px 16px !important;
+	font-family: inherit !important;
+	font-size: 14px !important;
+	color: var(--ink-4) !important;
+	width: 100% !important;
+	box-sizing: border-box !important;
+	line-height: 1.4 !important;
+	display: block !important;
+	box-shadow: none !important;
 }
 .dc-checkout input::placeholder,
 .dc-checkout textarea::placeholder,
