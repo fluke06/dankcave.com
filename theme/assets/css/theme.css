@@ -1575,33 +1575,98 @@ body.nav-open { overflow: hidden; }
 	background: var(--accent-wine);
 }
 
-/* Variations */
+/* Variations — restack the table as a vertical list of fields for a cleaner look */
 .pdp-summary__cart .variations {
 	width: 100%;
 	border-collapse: collapse;
+	display: block;
 }
-.pdp-summary__cart .variations th,
-.pdp-summary__cart .variations td {
-	padding: 8px 0;
-	vertical-align: middle;
+.pdp-summary__cart .variations tbody,
+.pdp-summary__cart .variations tr { display: block; }
+.pdp-summary__cart .variations tr {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-bottom: 14px;
 }
 .pdp-summary__cart .variations th {
-	font-size: 13px;
-	font-weight: 700;
+	display: block;
+	padding: 0;
+	font-size: 12px;
+	font-weight: 800;
+	letter-spacing: .08em;
+	text-transform: uppercase;
 	color: var(--ink-4);
 	text-align: left;
-	width: 140px;
+	width: auto;
+}
+.pdp-summary__cart .variations td {
+	display: block;
+	padding: 0;
+	position: relative;
 }
 .pdp-summary__cart .variations select {
 	appearance: none;
-	background: #fff;
+	background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'><path fill='none' stroke='%2322242a' stroke-width='1.6' d='M1 1l5 5 5-5'/></svg>") no-repeat right 18px center;
 	border: 1px solid #dcd7cd;
-	border-radius: 12px;
-	padding: 10px 32px 10px 14px;
+	border-radius: 14px;
+	padding: 16px 40px 16px 18px;
 	font-family: inherit;
-	font-size: 14px;
+	font-size: 14.5px;
+	font-weight: 600;
 	color: var(--ink-4);
-	min-width: 220px;
+	width: 100%;
+	line-height: 1;
+	cursor: pointer;
+	transition: border-color .15s;
+}
+.pdp-summary__cart .variations select:focus {
+	outline: none;
+	border-color: var(--ink-4);
+}
+.pdp-summary__cart .reset_variations {
+	display: inline-block;
+	font-size: 12.5px;
+	color: var(--accent-wine);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+	margin: 6px 0 0;
+	font-weight: 600;
+}
+
+/* Bottom row (qty + add-to-cart) on variable products has its own wrapper */
+.pdp-summary__cart .woocommerce-variation-add-to-cart {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-top: 6px;
+}
+.pdp-summary__cart .woocommerce-variation-add-to-cart.woocommerce-variation-add-to-cart-disabled .single_add_to_cart_button {
+	opacity: .5;
+	pointer-events: none;
+}
+.pdp-summary__cart .woocommerce-variation-price {
+	width: 100%;
+	font-family: var(--font-body);
+	font-weight: 800;
+	font-size: 22px;
+	color: var(--ink);
+	margin: 0 0 4px;
+}
+.pdp-summary__cart .woocommerce-variation-price .amount { color: inherit; }
+.pdp-summary__cart .woocommerce-variation-availability {
+	width: 100%;
+	font-size: 13px;
+	color: var(--muted-3);
+	margin: 0 0 6px;
+}
+.pdp-summary__cart .woocommerce-variation-description {
+	width: 100%;
+	font-size: 14.5px;
+	line-height: 1.6;
+	color: var(--ink-6);
+	margin: 0 0 6px;
 }
 .pdp-summary__cart .reset_variations {
 	font-size: 13px;
@@ -1654,13 +1719,17 @@ body.nav-open { overflow: hidden; }
 	width: 20px;
 	text-align: center;
 }
-.pdp-accordion__icon::before { content: '+'; }
+.pdp-accordion__icon::before { content: '+'; transition: transform .3s ease; display: inline-block; }
 .pdp-accordion[open] .pdp-accordion__icon::before { content: '–'; }
+/* We collapse height via JS so the body must always be rendered by the browser.
+   Force the summary marker's siblings to be visible so the transition can run. */
+.pdp-accordion > *:not(summary) { display: block !important; }
 .pdp-accordion__body {
 	padding-bottom: 18px;
 	font-size: 14px;
 	line-height: 1.7;
 	color: var(--ink-6, #5c616a);
+	will-change: max-height, opacity;
 }
 .pdp-accordion__body p:last-child { margin-bottom: 0; }
 .pdp-accordion__specs {
@@ -3317,15 +3386,15 @@ table.my_account_orders td {
 .dc-post__hero-well {
 	aspect-ratio: 16 / 8;
 	border-radius: 24px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	overflow: hidden;
+	position: relative;
 }
 .dc-post__hero-well img {
-	max-height: 90%;
-	max-width: 90%;
-	object-fit: contain;
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 .dc-post__body {

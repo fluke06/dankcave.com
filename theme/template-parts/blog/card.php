@@ -39,11 +39,9 @@ if ( $post ) {
 	$excerpt   = $demo['excerpt']    ?? '';
 }
 
-$wells = array( '#f3e3d0', '#e6ede2', '#efe7dd', '#f2ede8', '#f1e6d6' );
-$well  = $wells[ abs( crc32( (string) ( $post ? $post->ID : $title ) ) ) % count( $wells ) ];
 ?>
 <a class="blog-card" href="<?php echo esc_url( $permalink ); ?>">
-	<div class="blog-card__well" style="background:<?php echo esc_attr( $well ); ?>">
+	<div class="blog-card__well">
 		<?php if ( $image_url ) : ?>
 			<img src="<?php echo esc_url( $image_url ); ?>" alt="" loading="lazy">
 		<?php endif; ?>

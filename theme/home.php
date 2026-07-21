@@ -60,11 +60,9 @@ if ( $is_page_1 && ! is_category() && ! is_tag() && have_posts() ) {
 			$date      = get_the_date( 'M j', $featured );
 			$reading   = function_exists( 'dankcave_reading_time' ) ? dankcave_reading_time( $featured->ID ) : '';
 			$excerpt   = get_the_excerpt( $featured );
-			$wells     = array( '#f3e3d0', '#e6ede2', '#efe7dd', '#f2ede8', '#f1e6d6' );
-			$well      = $wells[ abs( crc32( (string) $featured->ID ) ) % count( $wells ) ];
 			?>
 			<a class="dc-blog-featured" href="<?php echo esc_url( $permalink ); ?>">
-				<div class="dc-blog-featured__media" style="background: <?php echo esc_attr( $well ); ?>;">
+				<div class="dc-blog-featured__media">
 					<?php if ( $image ) : ?>
 						<img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy">
 					<?php endif; ?>

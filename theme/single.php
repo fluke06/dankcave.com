@@ -29,9 +29,6 @@ while ( have_posts() ) : the_post();
 	$thumb_id  = get_post_thumbnail_id( $post_id );
 	$hero_url  = $thumb_id ? wp_get_attachment_image_url( $thumb_id, 'large' ) : '';
 
-	$wells = array( '#f3e3d0', '#e6ede2', '#efe7dd', '#f2ede8', '#f1e6d6' );
-	$well  = $wells[ abs( crc32( (string) $post_id ) ) % count( $wells ) ];
-
 	$tags = get_the_tags();
 	?>
 
@@ -60,7 +57,7 @@ while ( have_posts() ) : the_post();
 
 		<?php if ( $hero_url ) : ?>
 			<div class="dc-post__hero">
-				<div class="dc-post__hero-well" style="background: <?php echo esc_attr( $well ); ?>;">
+				<div class="dc-post__hero-well">
 					<img src="<?php echo esc_url( $hero_url ); ?>" alt="<?php the_title_attribute(); ?>">
 				</div>
 			</div>
