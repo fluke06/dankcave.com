@@ -13,10 +13,7 @@ get_header(); ?>
 <?php get_template_part( 'template-parts/home/editorial-band' ); ?>
 <?php get_template_part( 'template-parts/home/popular-trending' ); ?>
 <?php get_template_part( 'template-parts/home/new-products' ); ?>
-
-<?php
-// TODO: subsequent home sections (Blog row, CTA band, Stats) get built in
-// follow-up commits.
-?>
+<?php get_template_part( 'template-parts/home/blog-row' ); ?>
+<?php get_template_part( 'template-parts/home/trust-band' ); ?>
 
 <?php get_footer(); ?>
