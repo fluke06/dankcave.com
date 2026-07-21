@@ -138,10 +138,4 @@ defined( 'ABSPATH' ) || exit;
 	 */
 	?>
 
-	<div class="dc-review__trust">
-		<span>🔒 <?php esc_html_e( 'Secure', 'dankcave' ); ?></span>
-		<span>Visa</span>
-		<span>MC</span>
-		<span>Amex</span>
-	</div>
 </div>

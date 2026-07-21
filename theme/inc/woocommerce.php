@@ -40,41 +40,56 @@ add_action( 'woocommerce_after_main_content', 'dankcave_woocommerce_wrapper_end'
  */
 add_filter( 'woocommerce_checkout_fields', 'dankcave_shape_checkout_fields', 20 );
 function dankcave_shape_checkout_fields( $fields ) {
-	// Drop company and last_name/first_name column-first tags — we style them ourselves.
 	unset( $fields['billing']['billing_company'] );
 	unset( $fields['shipping']['shipping_company'] );
 
-	// Ensure email + phone are required and visible on the checkout, and give email priority so it renders first.
+	// Placeholder text mirrors the design mockup so empty fields hint their content.
+	$placeholders = array(
+		'billing_email'      => __( 'you@email.com', 'dankcave' ),
+		'billing_first_name' => __( 'Jane', 'dankcave' ),
+		'billing_last_name'  => __( 'Doe', 'dankcave' ),
+		'billing_address_1'  => __( '3941 Holly Drive', 'dankcave' ),
+		'billing_address_2'  => __( 'Apt, suite (optional)', 'dankcave' ),
+		'billing_city'       => __( 'Tracy', 'dankcave' ),
+		'billing_postcode'   => __( '95304', 'dankcave' ),
+		'billing_phone'      => __( '(209) 555-0142', 'dankcave' ),
+		'shipping_first_name' => __( 'Jane', 'dankcave' ),
+		'shipping_last_name'  => __( 'Doe', 'dankcave' ),
+		'shipping_address_1'  => __( '3941 Holly Drive', 'dankcave' ),
+		'shipping_address_2'  => __( 'Apt, suite (optional)', 'dankcave' ),
+		'shipping_city'       => __( 'Tracy', 'dankcave' ),
+		'shipping_postcode'   => __( '95304', 'dankcave' ),
+		'shipping_phone'      => __( '(209) 555-0142', 'dankcave' ),
+	);
+	foreach ( $placeholders as $key => $ph ) {
+		$section = 0 === strpos( $key, 'billing_' ) ? 'billing' : 'shipping';
+		if ( isset( $fields[ $section ][ $key ] ) ) {
+			$fields[ $section ][ $key ]['placeholder'] = $ph;
+		}
+	}
+
+	// Email leads the Contact card, priority 4 so it's before everything else.
 	if ( isset( $fields['billing']['billing_email'] ) ) {
-		$fields['billing']['billing_email']['priority'] = 5;
-		$fields['billing']['billing_email']['class']    = array( 'form-row-wide' );
+		$fields['billing']['billing_email']['priority'] = 4;
+		$fields['billing']['billing_email']['class']    = array( 'form-row-wide', 'dc-contact-email' );
+		$fields['billing']['billing_email']['label']    = __( 'Email address', 'dankcave' );
 	}
-	if ( isset( $fields['billing']['billing_first_name'] ) ) {
-		$fields['billing']['billing_first_name']['priority'] = 10;
-	}
-	if ( isset( $fields['billing']['billing_last_name'] ) ) {
-		$fields['billing']['billing_last_name']['priority'] = 20;
-	}
-	if ( isset( $fields['billing']['billing_country'] ) ) {
-		$fields['billing']['billing_country']['priority'] = 30;
-	}
-	if ( isset( $fields['billing']['billing_address_1'] ) ) {
-		$fields['billing']['billing_address_1']['priority'] = 40;
-	}
-	if ( isset( $fields['billing']['billing_address_2'] ) ) {
-		$fields['billing']['billing_address_2']['priority'] = 50;
-	}
-	if ( isset( $fields['billing']['billing_city'] ) ) {
-		$fields['billing']['billing_city']['priority'] = 60;
-	}
-	if ( isset( $fields['billing']['billing_state'] ) ) {
-		$fields['billing']['billing_state']['priority'] = 70;
-	}
-	if ( isset( $fields['billing']['billing_postcode'] ) ) {
-		$fields['billing']['billing_postcode']['priority'] = 80;
-	}
-	if ( isset( $fields['billing']['billing_phone'] ) ) {
-		$fields['billing']['billing_phone']['priority'] = 90;
+	// Everything else keeps design's ordering.
+	$order = array(
+		'billing_first_name' => 10,
+		'billing_last_name'  => 20,
+		'billing_country'    => 30,
+		'billing_address_1'  => 40,
+		'billing_address_2'  => 50,
+		'billing_city'       => 60,
+		'billing_state'      => 70,
+		'billing_postcode'   => 80,
+		'billing_phone'      => 90,
+	);
+	foreach ( $order as $key => $prio ) {
+		if ( isset( $fields['billing'][ $key ] ) ) {
+			$fields['billing'][ $key ]['priority'] = $prio;
+		}
 	}
 	return $fields;
 }
