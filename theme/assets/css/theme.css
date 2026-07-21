@@ -4642,3 +4642,92 @@ body.search-open { overflow: hidden; }
 }
 .dc-shipping-method__label .amount { color: inherit; font-weight: 800; }
 .dc-shipping-method:has(input:checked) .dc-shipping-method__label { color: var(--ink); }
+
+/* -----------------------------------------------------------------------------
+   Inline log-in link + coupon field (replaces the full-width WC toasts)
+----------------------------------------------------------------------------- */
+.dc-checkout-inline-actions {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	color: var(--muted-3);
+	margin: -8px 0 12px;
+}
+.dc-checkout-inline-actions__prompt { color: var(--muted-3); }
+.dc-checkout-inline-actions__link {
+	color: var(--accent-wine);
+	font-weight: 700;
+	text-decoration: none;
+}
+.dc-checkout-inline-actions__link:hover { text-decoration: underline; }
+
+.dc-checkout-inline-login {
+	background: var(--cream-100);
+	border-radius: 14px;
+	padding: 18px 20px;
+	margin: 0 0 18px;
+}
+.dc-checkout-inline-login[hidden] { display: none; }
+
+/* Coupon in the order-review sidebar */
+.dc-review__coupon {
+	margin-top: 16px;
+	padding-top: 16px;
+	border-top: 1px solid #e2ded9;
+}
+.dc-review__coupon-toggle {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 13.5px;
+	color: var(--ink-6);
+}
+.dc-review__coupon-toggle a {
+	color: var(--accent-wine);
+	font-weight: 700;
+	text-decoration: none;
+}
+.dc-review__coupon-form {
+	display: flex;
+	gap: 8px;
+	margin-top: 12px;
+}
+.dc-review__coupon-form[hidden] { display: none; }
+.dc-review__coupon-form .dc-review__coupon-input {
+	flex: 1;
+	appearance: none;
+	background: #fff;
+	border: 1px solid #dcd7cd;
+	border-radius: 12px;
+	padding: 12px 14px;
+	font-family: inherit;
+	font-size: 13.5px;
+	color: var(--ink-4);
+	min-width: 0;
+}
+.dc-review__coupon-form .dc-review__coupon-input:focus {
+	outline: none;
+	border-color: var(--ink-4);
+}
+.dc-review__coupon-form .dc-review__coupon-apply {
+	appearance: none;
+	background: var(--ink-4);
+	color: #fff;
+	border: 0;
+	border-radius: 12px;
+	font-weight: 700;
+	font-size: 13px;
+	padding: 12px 18px;
+	cursor: pointer;
+	flex: none;
+	transition: background .18s;
+}
+.dc-review__coupon-form .dc-review__coupon-apply:hover { background: var(--accent-wine); }
+
+/* Hide the full-width toast wrappers that WC prints at .site-content level */
+.site-content > .woocommerce > .woocommerce-form-login-toggle,
+.site-content > .woocommerce > .woocommerce-form-coupon-toggle {
+	display: none !important;
+}

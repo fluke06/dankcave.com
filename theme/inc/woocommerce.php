@@ -106,6 +106,48 @@ function dankcave_relabel_billing_heading( $translated, $original, $domain ) {
 }
 
 /**
+ * Replace the default "Returning customer? Click here to login" notice with a
+ * subtle inline link at the top-right of the Contact card. Same for the
+ * coupon toggle — surface it as a small link near the order review sidebar
+ * instead of a full-width toast.
+ */
+remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_login_form', 10 );
+remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
+
+// Log in link inline at the top of the Contact card
+add_action( 'woocommerce_before_checkout_billing_form', 'dankcave_checkout_inline_login', 5 );
+function dankcave_checkout_inline_login( $checkout ) {
+	if ( is_user_logged_in() ) { return; }
+	?>
+	<div class="dc-checkout-inline-actions">
+		<span class="dc-checkout-inline-actions__prompt"><?php esc_html_e( 'Have an account?', 'dankcave' ); ?></span>
+		<a href="#" class="dc-checkout-inline-actions__link" data-dc-toggle-login><?php esc_html_e( 'Log in', 'dankcave' ); ?></a>
+	</div>
+	<div class="dc-checkout-inline-login" hidden data-dc-inline-login>
+		<?php woocommerce_login_form( array( 'redirect' => wc_get_checkout_url(), 'hidden' => true ) ); ?>
+	</div>
+	<?php
+}
+
+// Coupon field inline in the order review sidebar
+add_action( 'woocommerce_review_order_after_order_total', 'dankcave_checkout_inline_coupon', 20 );
+function dankcave_checkout_inline_coupon() {
+	if ( ! wc_coupons_enabled() ) { return; }
+	?>
+	<div class="dc-review__coupon">
+		<div class="dc-review__coupon-toggle">
+			<span><?php esc_html_e( 'Have a coupon?', 'dankcave' ); ?></span>
+			<a href="#" data-dc-toggle-coupon><?php esc_html_e( 'Enter code', 'dankcave' ); ?></a>
+		</div>
+		<form class="dc-review__coupon-form" method="post" hidden data-dc-inline-coupon>
+			<input type="text" name="coupon_code" class="dc-review__coupon-input" placeholder="<?php esc_attr_e( 'Discount code', 'dankcave' ); ?>" value="">
+			<button type="submit" class="dc-review__coupon-apply" name="apply_coupon" value="1"><?php esc_html_e( 'Apply', 'dankcave' ); ?></button>
+		</form>
+	</div>
+	<?php
+}
+
+/**
  * Break the shipping methods out into their own card above payment, matching the design.
  * We suppress the default inline render (which sits between subtotal and total in the
  * order summary) and instead output it as a labelled card in the main column.

@@ -216,5 +216,37 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		} );
 	}
 
+	// Checkout inline toggles for login form + coupon form
+	document.querySelectorAll( '[data-dc-toggle-login]' ).forEach( function ( link ) {
+		link.addEventListener( 'click', function ( e ) {
+			e.preventDefault();
+			const target = document.querySelector( '[data-dc-inline-login]' );
+			if ( ! target ) return;
+			const isOpen = ! target.hasAttribute( 'hidden' );
+			if ( isOpen ) {
+				target.setAttribute( 'hidden', '' );
+			} else {
+				target.removeAttribute( 'hidden' );
+				const input = target.querySelector( 'input[type="text"], input[type="email"]' );
+				if ( input ) setTimeout( () => input.focus(), 20 );
+			}
+		} );
+	} );
+	document.querySelectorAll( '[data-dc-toggle-coupon]' ).forEach( function ( link ) {
+		link.addEventListener( 'click', function ( e ) {
+			e.preventDefault();
+			const target = document.querySelector( '[data-dc-inline-coupon]' );
+			if ( ! target ) return;
+			const isOpen = ! target.hasAttribute( 'hidden' );
+			if ( isOpen ) {
+				target.setAttribute( 'hidden', '' );
+			} else {
+				target.removeAttribute( 'hidden' );
+				const input = target.querySelector( 'input[type="text"]' );
+				if ( input ) setTimeout( () => input.focus(), 20 );
+			}
+		} );
+	} );
+
 	// TODO: Cart drawer open/close (when we build the mini-cart)
 } );
