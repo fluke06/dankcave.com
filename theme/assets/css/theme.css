@@ -239,7 +239,15 @@ p { margin: 0 0 var(--sp-4); }
 	text-decoration: none;
 	box-shadow: 0 2px 10px rgba(34, 36, 42, 0.06);
 	transition: transform .15s ease, box-shadow .15s ease;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
+	appearance: none;
+	outline: none;
 }
+.header-search-pill:focus,
+.header-search-pill:focus-visible { outline: none; box-shadow: 0 2px 10px rgba(34, 36, 42, .06), 0 0 0 3px rgba(34, 36, 42, .12); }
+.header-search-pill::-moz-focus-inner { border: 0; }
 .header-search-pill:hover {
 	transform: translateY(-1px);
 	box-shadow: 0 4px 14px rgba(34, 36, 42, 0.10);
@@ -2316,11 +2324,32 @@ form.checkout label {
 	color: var(--accent-wine);
 	text-decoration: none;
 }
-form.checkout .woocommerce-input-wrapper { display: block; width: 100%; }
-form.checkout input.input-text,
-form.checkout textarea,
-form.checkout .select2-selection,
-form.checkout select {
+/* Unified input styling for every form on the site: checkout, login/register,
+   my-account edit, coupon, lost-password. Scoped to our page templates so we
+   don't override the header search modal (which has its own dark styling). */
+.dc-checkout .woocommerce-input-wrapper,
+.dc-account .woocommerce-input-wrapper,
+.dc-cart .woocommerce-input-wrapper { display: block; width: 100%; }
+
+.dc-checkout input.input-text,
+.dc-checkout input[type="text"],
+.dc-checkout input[type="email"],
+.dc-checkout input[type="password"],
+.dc-checkout input[type="tel"],
+.dc-checkout input[type="number"],
+.dc-checkout textarea,
+.dc-checkout select,
+.dc-checkout .select2-selection,
+.dc-account input.input-text,
+.dc-account input[type="text"],
+.dc-account input[type="email"],
+.dc-account input[type="password"],
+.dc-account input[type="tel"],
+.dc-account input[type="number"],
+.dc-account textarea,
+.dc-account select,
+.dc-cart input[type="text"]:not([name="coupon_code"]),
+.dc-cart input[type="email"] {
 	appearance: none;
 	background: #fff;
 	border: 1px solid #dcd7cd;
@@ -2334,13 +2363,22 @@ form.checkout select {
 	line-height: 1.4;
 	display: block;
 }
-form.checkout textarea { min-height: 96px; }
-form.checkout .select2-selection { padding: 6px 12px; height: 46px; }
-form.checkout .select2-selection__rendered { padding: 0 !important; line-height: 34px; }
-form.checkout .select2-selection__arrow { top: 12px !important; right: 12px !important; }
-form.checkout input.input-text:focus,
-form.checkout textarea:focus,
-form.checkout select:focus {
+.dc-checkout textarea,
+.dc-account textarea { min-height: 96px; }
+.dc-checkout .select2-selection,
+.dc-account .select2-selection { padding: 6px 12px; height: 46px; }
+.dc-checkout .select2-selection__rendered,
+.dc-account .select2-selection__rendered { padding: 0 !important; line-height: 34px; }
+.dc-checkout .select2-selection__arrow,
+.dc-account .select2-selection__arrow { top: 12px !important; right: 12px !important; }
+
+/* Focus state */
+.dc-checkout input:focus,
+.dc-checkout textarea:focus,
+.dc-checkout select:focus,
+.dc-account input:focus,
+.dc-account textarea:focus,
+.dc-account select:focus {
 	outline: none;
 	border-color: var(--ink-4);
 }
