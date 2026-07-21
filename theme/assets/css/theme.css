@@ -4104,13 +4104,20 @@ body.single {
    Cart & checkout polish (round 2)
 ----------------------------------------------------------------------------- */
 
-/* WooCommerce notices should sit inside our page padding, not full-width.
-   Cover both placements — inside our cards, and at the .site-content level
-   where WC prints them via woocommerce_before_cart action. */
-.site-content > .woocommerce-message,
-.site-content > .woocommerce-info,
-.site-content > .woocommerce-error,
-.site-content > .woocommerce-notices-wrapper,
+/* WooCommerce prints notices and coupon/login toggles as direct children of
+   .site-content > .woocommerce. Push those slots (not the wrapper — that
+   would indent the entire checkout form too) inside our gutter. */
+.site-content > .woocommerce > .woocommerce-notices-wrapper,
+.site-content > .woocommerce > .woocommerce-form-login-toggle,
+.site-content > .woocommerce > .woocommerce-form-coupon-toggle,
+.site-content > .woocommerce > .woocommerce-form-login,
+.site-content > .woocommerce > .woocommerce-form-coupon,
+.site-content > .woocommerce > .checkout_coupon,
+.site-content > .woocommerce-notices-wrapper {
+	margin-left: var(--gutter-x);
+	margin-right: var(--gutter-x);
+	margin-top: 20px;
+}
 .dc-cart .woocommerce-message,
 .dc-cart .woocommerce-info,
 .dc-cart .woocommerce-error,
@@ -4120,24 +4127,8 @@ body.single {
 .dc-account .woocommerce-message,
 .dc-account .woocommerce-info,
 .dc-account .woocommerce-error {
-	margin: 20px 48px 0 !important;
-}
-@media (max-width: 900px) {
-	.site-content > .woocommerce-message,
-	.site-content > .woocommerce-info,
-	.site-content > .woocommerce-error,
-	.site-content > .woocommerce-notices-wrapper,
-	.dc-cart .woocommerce-message,
-	.dc-cart .woocommerce-info,
-	.dc-cart .woocommerce-error,
-	.dc-checkout .woocommerce-message,
-	.dc-checkout .woocommerce-info,
-	.dc-checkout .woocommerce-error,
-	.dc-account .woocommerce-message,
-	.dc-account .woocommerce-info,
-	.dc-account .woocommerce-error {
-		margin: 16px 24px 0 !important;
-	}
+	margin-left: 0 !important;
+	margin-right: 0 !important;
 }
 
 /* Cart line: keep side column narrow but not overflowing */
