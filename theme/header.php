@@ -1,7 +1,6 @@
 <?php
 /**
- * Site header — opening HTML, <head>, and site chrome (top nav).
- * TODO: Build the actual header markup per design/*.dc.html.
+ * Site header — <head>, floating pill nav over the hero.
  *
  * @package Dankcave
  */
@@ -16,23 +15,6 @@
 <body <?php body_class(); ?>>
 	<?php wp_body_open(); ?>
 
-	<header class="site-header">
-		<div class="wrap">
-			<a class="site-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<?php bloginfo( 'name' ); ?>
-			</a>
-			<nav class="primary-nav" aria-label="<?php esc_attr_e( 'Primary', 'dankcave' ); ?>">
-				<?php
-				wp_nav_menu( array(
-					'theme_location' => 'primary',
-					'container'      => false,
-					'menu_class'     => 'primary-nav__list',
-					'fallback_cb'    => false,
-					'depth'          => 2,
-				) );
-				?>
-			</nav>
-		</div>
-	</header>
+	<?php get_template_part( 'template-parts/header/site-header' ); ?>
 
 	<div class="site-content">

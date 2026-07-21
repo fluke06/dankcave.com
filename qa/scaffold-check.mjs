@@ -25,8 +25,13 @@ async function check(label, viewport) {
   const info = await p.evaluate(() => ({
     title: document.title,
     hasHeader: !!document.querySelector('.site-header'),
-    hasFooter: !!document.querySelector('.site-footer'),
     hasBrand: !!document.querySelector('.site-brand'),
+    hasPrimaryNav: !!document.querySelector('.primary-nav'),
+    hasCart: !!document.querySelector('.cart-summary'),
+    hasNewsletter: !!document.querySelector('.newsletter-band'),
+    hasLegalBar: !!document.querySelector('.legal-bar'),
+    hasMobileToggle: !!document.querySelector('.site-header__toggle'),
+    navItemCount: document.querySelectorAll('.primary-nav__list li').length,
     overflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth,
     bodyClasses: document.body.className.slice(0, 300),
   }));
@@ -34,7 +39,8 @@ async function check(label, viewport) {
   console.log(`\n[${label}]  HTTP ${res.status()}  overflow ${info.overflow}px`);
   console.log(`  title: ${info.title}`);
   console.log(`  body.class: ${info.bodyClasses}`);
-  console.log(`  header/footer/brand: ${info.hasHeader}/${info.hasFooter}/${info.hasBrand}`);
+  console.log(`  header: ${info.hasHeader}  brand: ${info.hasBrand}  nav: ${info.hasPrimaryNav} (${info.navItemCount} items)  cart: ${info.hasCart}  mobile-toggle: ${info.hasMobileToggle}`);
+  console.log(`  footer: newsletter=${info.hasNewsletter}  legal-bar=${info.hasLegalBar}`);
   await ctx.close();
 }
 

@@ -53,10 +53,16 @@ function dankcave_setup() {
 	add_image_size( 'dc-editorial',       1200, 800,  true ); // Editorial band image
 
 	register_nav_menus( array(
-		'primary'         => __( 'Primary Menu (header)',   'dankcave' ),
-		'footer-shop'     => __( 'Footer — Shop',            'dankcave' ),
-		'footer-company'  => __( 'Footer — Company',         'dankcave' ),
-		'footer-support'  => __( 'Footer — Support & Legal', 'dankcave' ),
+		'primary'      => __( 'Primary Menu (header pill)',  'dankcave' ),
+		'footer-legal' => __( 'Footer legal (Shipping / Returns / Privacy / Terms)', 'dankcave' ),
+	) );
+
+	// Enable native custom-logo support so Javid can upload a logo via the Customizer.
+	add_theme_support( 'custom-logo', array(
+		'height'      => 120,
+		'width'       => 480,
+		'flex-height' => true,
+		'flex-width'  => true,
 	) );
 }
 add_action( 'after_setup_theme', 'dankcave_setup' );
