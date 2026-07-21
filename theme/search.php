@@ -9,8 +9,20 @@
 get_header();
 
 $query          = get_search_query();
-$total_results  = (int) $GLOBALS['wp_query']->found_posts;
 $type_filter    = isset( $_GET['type'] ) ? sanitize_key( $_GET['type'] ) : '';
+$current_page   = max( 1, get_query_var( 'paged' ) ?: get_query_var( 'page' ) );
+
+// Build a fresh query — the main $wp_query pointer may have been consumed by
+// plugins (Yoast, Elementor) before our template ran.
+$search_types = $type_filter ? array( $type_filter ) : array( 'post', 'page', 'product' );
+$search_query = new WP_Query( array(
+	's'              => $query,
+	'post_type'      => $search_types,
+	'posts_per_page' => 12,
+	'paged'          => $current_page,
+	'post_status'    => 'publish',
+) );
+$total_results = (int) $search_query->found_posts;
 
 $type_labels = array(
 	''         => __( 'All', 'dankcave' ),
@@ -55,19 +67,23 @@ $type_labels = array(
 		</nav>
 	</header>
 
-	<?php if ( have_posts() ) : ?>
+	<?php if ( $total_results > 0 ) : ?>
 		<div class="dc-search__results">
 			<?php
 			$products = array();
 			$posts    = array();
 			$pages    = array();
-			while ( have_posts() ) : the_post();
-				$type = get_post_type();
+			foreach ( (array) $search_query->posts as $result_post ) {
+				$type = $result_post->post_type;
 				if ( $type_filter && $type_filter !== $type ) { continue; }
-				if ( 'product' === $type )      $products[] = get_the_ID();
-				elseif ( 'post' === $type )     $posts[]    = get_post();
-				elseif ( 'page' === $type )     $pages[]    = get_post();
-			endwhile;
+				if ( 'product' === $type ) {
+					$products[] = $result_post->ID;
+				} elseif ( 'post' === $type ) {
+					$posts[] = $result_post;
+				} elseif ( 'page' === $type ) {
+					$pages[] = $result_post;
+				}
+			}
 			?>
 
 			<?php if ( ! empty( $products ) && ( ! $type_filter || 'product' === $type_filter ) ) : ?>
@@ -112,12 +128,26 @@ $type_labels = array(
 			<?php endif; ?>
 		</div>
 
-		<?php the_posts_pagination( array(
+		<?php
+		$pagination_links = paginate_links( array(
+			'base'      => add_query_arg( 'paged', '%#%' ),
+			'format'    => '',
+			'total'     => $search_query->max_num_pages,
+			'current'   => $current_page,
+			'type'      => 'array',
 			'prev_text' => __( '← Prev', 'dankcave' ),
 			'next_text' => __( 'Next →', 'dankcave' ),
 			'mid_size'  => 2,
-			'class'     => 'dc-search__pagination',
-		) ); ?>
+		) );
+		if ( $pagination_links ) : ?>
+			<nav class="dc-search__pagination" aria-label="<?php esc_attr_e( 'Search results pagination', 'dankcave' ); ?>">
+				<div class="nav-links">
+					<?php foreach ( $pagination_links as $link ) : ?>
+						<?php echo wp_kses_post( $link ); ?>
+					<?php endforeach; ?>
+				</div>
+			</nav>
+		<?php endif; ?>
 
 	<?php else : ?>
 		<div class="dc-search__empty">

@@ -120,7 +120,4 @@ $last_name     = $current_user->last_name;
 		</div>
 	</div>
 
-	<?php do_action( 'woocommerce_account_dashboard' ); ?>
-	<?php do_action( 'woocommerce_before_my_account' ); ?>
-	<?php do_action( 'woocommerce_after_my_account' ); ?>
 </div>

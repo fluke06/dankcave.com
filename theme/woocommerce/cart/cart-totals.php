@@ -25,10 +25,16 @@ $cart_total   = WC()->cart->get_total();
 		</div>
 	<?php endforeach; ?>
 
-	<?php if ( WC()->cart->needs_shipping() && WC()->cart->show_shipping() ) : ?>
+	<?php if ( WC()->cart->needs_shipping() ) :
+		$threshold = (float) get_theme_mod( 'dankcave_free_ship_threshold', 50 );
+		$subtotal  = (float) WC()->cart->get_subtotal();
+		$free      = ( $subtotal >= $threshold ) && $threshold > 0;
+	?>
 		<div class="dc-summary-card__row">
 			<span><?php esc_html_e( 'Shipping', 'dankcave' ); ?></span>
-			<span class="dc-summary-card__val dc-summary-card__shipping"><?php wc_cart_totals_shipping_html(); ?></span>
+			<span class="dc-summary-card__val">
+				<?php echo $free ? esc_html__( 'FREE', 'dankcave' ) : esc_html__( 'Calculated at checkout', 'dankcave' ); ?>
+			</span>
 		</div>
 	<?php endif; ?>
 

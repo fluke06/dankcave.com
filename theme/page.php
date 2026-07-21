@@ -9,6 +9,19 @@
 
 get_header();
 
+// WooCommerce pages (cart, checkout, my-account, order tracking) render their
+// own layouts via shortcodes. Bail out of the page.php header + card wrapper
+// so we don't double-title or crush their two-column layouts.
+$is_wc_shortcode_page = function_exists( 'is_cart' ) && ( is_cart() || is_checkout() || is_account_page() || is_wc_endpoint_url() );
+
+if ( $is_wc_shortcode_page ) {
+	while ( have_posts() ) : the_post();
+		the_content();
+	endwhile;
+	get_footer();
+	return;
+}
+
 while ( have_posts() ) : the_post();
 	$page_id     = get_the_ID();
 	$parent_id   = wp_get_post_parent_id( $page_id );
