@@ -27,8 +27,10 @@ defined( 'ABSPATH' ) || exit;
 			$attrs = wc_get_formatted_cart_item_data( $cart_item );
 			?>
 			<li class="dc-review-item <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
-				<div class="dc-review-item__thumb" style="background: <?php echo esc_attr( $well_bg ); ?>;">
-					<?php echo $_product->get_image( 'woocommerce_thumbnail' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<div class="dc-review-item__thumb">
+					<div class="dc-review-item__thumb-media">
+						<?php echo $_product->get_image( 'woocommerce_thumbnail' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					</div>
 					<span class="dc-review-item__qty"><?php echo esc_html( $cart_item['quantity'] ); ?></span>
 				</div>
 				<div class="dc-review-item__info">

@@ -1946,16 +1946,18 @@ body.nav-open { overflow: hidden; }
 .dc-cart-line__thumb {
 	aspect-ratio: 1;
 	border-radius: 14px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	overflow: hidden;
 	text-decoration: none;
+	position: relative;
+	background: #fff;
 }
 .dc-cart-line__thumb img {
-	max-height: 78%;
-	max-width: 78%;
-	object-fit: contain;
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
 }
 .dc-cart-line__info {
 	display: flex;
@@ -2518,18 +2520,24 @@ form.checkout label {
 .dc-review-item__thumb {
 	width: 60px;
 	height: 60px;
-	border-radius: 12px;
 	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden;
 	flex: none;
+	overflow: visible;
+}
+.dc-review-item__thumb-media {
+	position: absolute;
+	inset: 0;
+	border-radius: 12px;
+	overflow: hidden;
+	background: #fff;
 }
 .dc-review-item__thumb img {
-	max-height: 76%;
-	max-width: 76%;
-	object-fit: contain;
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
 }
 .dc-review-item__qty {
 	position: absolute;
@@ -4268,15 +4276,10 @@ body.single {
 }
 .dc-cart-line__side { align-items: flex-end; }
 
-/* Product image in cart line: hide broken alt-text, clip to well */
+/* Hide broken-image alt text on cart line thumbs (image sizing lives in the
+   base rule above — full cover fill). */
 .dc-cart-line__thumb img {
-	max-width: 78%;
-	max-height: 78%;
-	width: auto;
-	height: auto;
-	object-fit: contain;
-	overflow: hidden;
-	color: transparent; /* hide "img not loaded" alt text */
+	color: transparent;
 	font-size: 0;
 	text-indent: -9999em;
 }
