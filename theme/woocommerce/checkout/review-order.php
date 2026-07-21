@@ -63,10 +63,37 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 		<?php endforeach; ?>
 
-		<?php if ( WC()->cart->needs_shipping() && WC()->cart->show_shipping() ) : ?>
-			<?php do_action( 'woocommerce_review_order_before_shipping' ); ?>
-			<?php wc_cart_totals_shipping_html(); ?>
-			<?php do_action( 'woocommerce_review_order_after_shipping' ); ?>
+		<?php
+		/**
+		 * Shipping method is rendered as its own labelled card in the customer
+		 * details column above (dankcave_checkout_shipping_method_card). Keep
+		 * the action hooks so payment gateways / analytics still fire, but
+		 * suppress the inline table row here so the summary card doesn't show
+		 * a duplicate radio list between subtotal and total.
+		 */
+		if ( WC()->cart->needs_shipping() && WC()->cart->show_shipping() ) :
+			do_action( 'woocommerce_review_order_before_shipping' );
+			do_action( 'woocommerce_review_order_after_shipping' );
+			$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
+			$chosen         = isset( $chosen_methods[0] ) ? $chosen_methods[0] : '';
+			$rates          = WC()->shipping()->get_packages();
+			$rate_label     = '';
+			if ( ! empty( $rates ) && ! empty( $rates[0]['rates'][ $chosen ] ) ) {
+				$rate           = $rates[0]['rates'][ $chosen ];
+				$rate_label     = $rate->get_label();
+				$rate_cost_html = wc_price( (float) $rate->get_cost() );
+			}
+		?>
+			<div class="dc-review__row">
+				<span><?php esc_html_e( 'Shipping', 'dankcave' ); ?></span>
+				<span class="dc-review__val">
+					<?php if ( $rate_label ) : ?>
+						<?php echo esc_html( $rate_label ); ?> · <?php echo wp_kses_post( $rate_cost_html ); ?>
+					<?php else : ?>
+						<?php esc_html_e( 'Choose above', 'dankcave' ); ?>
+					<?php endif; ?>
+				</span>
+			</div>
 		<?php endif; ?>
 
 		<?php foreach ( WC()->cart->get_fees() as $fee ) : ?>
