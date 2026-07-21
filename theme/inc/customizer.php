@@ -53,6 +53,35 @@ function dankcave_customize_register( $wp_customize ) {
 		'section'     => 'dankcave_hero',
 	) ) );
 
+	// -------------------- Home editorial band --------------------
+	$wp_customize->add_section( 'dankcave_editorial', array(
+		'title'       => __( 'Home editorial band', 'dankcave' ),
+		'description' => __( 'Video-backed dark band with pill badge, big heading, subcopy, and CTA on the left.', 'dankcave' ),
+		'priority'    => 34,
+	) );
+	$editorial_fields = array(
+		'dankcave_editorial_badge'     => array( 'label' => __( 'Pill badge (small caps)', 'dankcave' ),   'default' => 'Since 2006', 'type' => 'text' ),
+		'dankcave_editorial_heading_1' => array( 'label' => __( 'Heading, line 1', 'dankcave' ),          'default' => 'Twenty years', 'type' => 'text' ),
+		'dankcave_editorial_heading_2' => array( 'label' => __( 'Heading, line 2', 'dankcave' ),          'default' => 'at the torch.', 'type' => 'text' ),
+		'dankcave_editorial_body'      => array( 'label' => __( 'Body paragraph', 'dankcave' ),           'default' => "We started as borosilicate glassblowers. Every piece we stock today is something we'd keep on our own shelf.", 'type' => 'textarea' ),
+		'dankcave_editorial_cta_label' => array( 'label' => __( 'CTA button label', 'dankcave' ),         'default' => 'Read our story', 'type' => 'text' ),
+		'dankcave_editorial_cta_url'   => array( 'label' => __( 'CTA button link', 'dankcave' ),          'default' => home_url( '/about/' ), 'type' => 'url' ),
+		'dankcave_editorial_video_url' => array( 'label' => __( 'Background video URL (mp4)', 'dankcave' ), 'default' => DANKCAVE_URI . 'assets/videos/editorial-band-placeholder.mp4', 'type' => 'url' ),
+		'dankcave_editorial_poster'    => array( 'label' => __( 'Fallback poster image URL', 'dankcave' ), 'default' => '', 'type' => 'url' ),
+	);
+	foreach ( $editorial_fields as $id => $args ) {
+		$wp_customize->add_setting( $id, array(
+			'default'           => $args['default'],
+			'sanitize_callback' => 'textarea' === $args['type'] ? 'sanitize_textarea_field' : ( 'url' === $args['type'] ? 'esc_url_raw' : 'sanitize_text_field' ),
+			'transport'         => 'refresh',
+		) );
+		$wp_customize->add_control( $id, array(
+			'label'   => $args['label'],
+			'section' => 'dankcave_editorial',
+			'type'    => $args['type'],
+		) );
+	}
+
 	// -------------------- Newsletter (footer band) --------------------
 	$wp_customize->add_section( 'dankcave_newsletter', array(
 		'title'    => __( 'Footer newsletter', 'dankcave' ),

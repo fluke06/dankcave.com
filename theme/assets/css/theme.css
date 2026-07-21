@@ -892,6 +892,112 @@ body.nav-open { overflow: hidden; }
 	.category-tile__count { font-size: 11px; }
 }
 
+/* ---------- Editorial band (video-backed "Twenty years at the torch") ---------- */
+
+.home-editorial {
+	background: var(--cream-100);
+	padding: 56px 48px;
+}
+.home-editorial .wrap { padding: 0; max-width: 1440px; }
+
+.editorial-band {
+	position: relative;
+	border-radius: var(--r-2xl);
+	overflow: hidden;
+	height: 420px;
+	color: var(--cream-200);
+}
+
+.editorial-band__video {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	background: var(--ink-2); /* while video is loading */
+}
+
+.editorial-band__overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(105deg, rgba(28, 23, 20, 0.85) 30%, rgba(28, 23, 20, 0.15) 70%);
+	pointer-events: none;
+}
+
+.editorial-band__content {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 52%;
+	padding: 52px 56px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 16px;
+}
+
+.editorial-band__badge {
+	align-self: flex-start;
+	background: var(--accent-wine);
+	color: var(--white);
+	border-radius: var(--r-pill);
+	font-size: 11px;
+	font-weight: 800;
+	padding: 6px 14px;
+	letter-spacing: 0.04em;
+}
+
+.editorial-band__heading {
+	font-family: var(--font-body);
+	font-weight: 800;
+	font-size: 46px;
+	margin: 0;
+	letter-spacing: -0.03em;
+	line-height: 1.02;
+	color: var(--cream-200);
+}
+
+.editorial-band__body {
+	font-size: 15.5px;
+	line-height: 1.7;
+	color: rgba(242, 237, 232, 0.85);
+	margin: 0;
+	max-width: 40ch;
+}
+
+.editorial-band__cta {
+	align-self: flex-start;
+	margin-top: 8px;
+	background: var(--cream-200);
+	color: var(--ink-2);
+	font-weight: 700;
+	font-size: 15px;
+	padding: 14px 30px;
+	border-radius: var(--r-md);
+	text-decoration: none;
+	transition: transform 0.15s ease, background 0.15s ease;
+}
+.editorial-band__cta:hover {
+	transform: translateY(-1px);
+	background: var(--white);
+	opacity: 1;
+}
+
+@media (max-width: 900px) {
+	.home-editorial { padding: 40px 24px; }
+	.editorial-band { height: 460px; }
+	.editorial-band__content { width: auto; right: 0; padding: 36px 30px; }
+	.editorial-band__heading { font-size: 34px; }
+}
+@media (max-width: 480px) {
+	.editorial-band { height: 440px; border-radius: var(--r-xl); }
+	.editorial-band__content { padding: 28px 22px; gap: 12px; }
+	.editorial-band__heading { font-size: 28px; }
+	.editorial-band__body { font-size: 14px; }
+	.editorial-band__cta { padding: 12px 24px; font-size: 14px; }
+}
+
 /* ---------- Component styles land below as we build each template ---------- */
 
 /* Blog card — TODO */
