@@ -7,7 +7,7 @@ fs.mkdirSync(OUT, { recursive: true });
 const b = await chromium.launch();
 
 const pages = [
-  { name: 'about',   url: 'http://localhost:8090/about-us-3/', expect: ['pattern-about-hero','pattern-commitment','pattern-why','pattern-showcase','pattern-satisfaction','pattern-community'] },
+  { name: 'about',   url: 'http://localhost:8090/about-us/',   expect: ['pattern-about-hero','pattern-commitment','pattern-why','pattern-showcase','pattern-satisfaction','pattern-community'] },
   { name: 'contact', url: 'http://localhost:8090/contact-us/', expect: ['pattern-contact'] },
 ];
 
