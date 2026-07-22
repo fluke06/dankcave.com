@@ -224,7 +224,18 @@ function dankcave_ajax_compare_table() {
 		if ( $p ) { $products[] = $p; }
 	}
 	if ( empty( $products ) ) {
-		wp_send_json_success( array( 'html' => '<p class="dc-compare-empty">' . esc_html__( 'Nothing to compare yet. Add products with the compare icon on a card.', 'dankcave' ) . '</p>' ) );
+		ob_start();
+		?>
+		<div class="dc-compare-empty">
+			<div class="dc-compare-empty__icon" aria-hidden="true">
+				<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+			</div>
+			<h3 class="dc-compare-empty__title"><?php esc_html_e( 'Nothing to compare yet', 'dankcave' ); ?></h3>
+			<p class="dc-compare-empty__text"><?php esc_html_e( 'Tap the compare icon on any product card to line them up side-by-side here.', 'dankcave' ); ?></p>
+			<a class="dc-compare-empty__cta" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>"><?php esc_html_e( 'Browse products', 'dankcave' ); ?></a>
+		</div>
+		<?php
+		wp_send_json_success( array( 'html' => ob_get_clean() ) );
 	}
 
 	// Collect the union of visible attributes across all products so we can
@@ -237,18 +248,28 @@ function dankcave_ajax_compare_table() {
 		}
 	}
 
+	// Find the lowest price among in-stock products so we can flag the best value.
+	$prices = array();
+	foreach ( $products as $p ) {
+		$prices[ $p->get_id() ] = (float) wc_get_price_to_display( $p );
+	}
+	$min_price = $prices ? min( $prices ) : 0;
+
 	ob_start();
 	?>
-	<div class="dc-compare-table-wrap">
-		<table class="dc-compare-table">
+	<div class="dc-compare-table-wrap" role="region" aria-label="<?php esc_attr_e( 'Product comparison', 'dankcave' ); ?>">
+		<table class="dc-compare-table" data-cols="<?php echo esc_attr( count( $products ) ); ?>">
 			<thead>
 				<tr>
-					<th class="dc-compare-table__label"></th>
+					<th class="dc-compare-table__label" scope="col"></th>
 					<?php foreach ( $products as $p ) : ?>
-						<th class="dc-compare-table__head">
-							<a href="<?php echo esc_url( $p->get_permalink() ); ?>">
+						<th class="dc-compare-table__head" scope="col" data-product-id="<?php echo esc_attr( $p->get_id() ); ?>">
+							<button type="button" class="dc-compare-table__remove" data-dc-compare-remove="<?php echo esc_attr( $p->get_id() ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Remove %s from comparison', 'dankcave' ), $p->get_name() ) ); ?>">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+							</button>
+							<a href="<?php echo esc_url( $p->get_permalink() ); ?>" class="dc-compare-table__product">
 								<div class="dc-compare-table__thumb">
-									<img src="<?php echo esc_url( wp_get_attachment_image_url( $p->get_image_id(), 'medium' ) ?: wc_placeholder_img_src( 'medium' ) ); ?>" alt="">
+									<img src="<?php echo esc_url( wp_get_attachment_image_url( $p->get_image_id(), 'medium' ) ?: wc_placeholder_img_src( 'medium' ) ); ?>" alt="" loading="lazy">
 								</div>
 								<div class="dc-compare-table__name"><?php echo esc_html( $p->get_name() ); ?></div>
 							</a>
@@ -258,29 +279,48 @@ function dankcave_ajax_compare_table() {
 			</thead>
 			<tbody>
 				<tr>
-					<th class="dc-compare-table__label"><?php esc_html_e( 'Price', 'dankcave' ); ?></th>
-					<?php foreach ( $products as $p ) : ?>
-						<td><?php echo $p->get_price_html(); // phpcs:ignore ?></td>
+					<th class="dc-compare-table__label" scope="row"><?php esc_html_e( 'Price', 'dankcave' ); ?></th>
+					<?php foreach ( $products as $p ) :
+						$is_best = ( count( $products ) > 1 && $prices[ $p->get_id() ] > 0 && $prices[ $p->get_id() ] <= $min_price );
+					?>
+						<td data-label="<?php esc_attr_e( 'Price', 'dankcave' ); ?>">
+							<span class="dc-compare-table__price<?php echo $is_best ? ' is-best' : ''; ?>">
+								<?php echo $p->get_price_html(); // phpcs:ignore ?>
+							</span>
+							<?php if ( $is_best ) : ?>
+								<span class="dc-compare-table__badge dc-compare-table__badge--best"><?php esc_html_e( 'Best price', 'dankcave' ); ?></span>
+							<?php endif; ?>
+						</td>
 					<?php endforeach; ?>
 				</tr>
 				<tr>
-					<th class="dc-compare-table__label"><?php esc_html_e( 'Stock', 'dankcave' ); ?></th>
-					<?php foreach ( $products as $p ) : ?>
-						<td><?php echo esc_html( $p->is_in_stock() ? __( 'In stock', 'dankcave' ) : __( 'Sold out', 'dankcave' ) ); ?></td>
+					<th class="dc-compare-table__label" scope="row"><?php esc_html_e( 'Stock', 'dankcave' ); ?></th>
+					<?php foreach ( $products as $p ) :
+						$in_stock = $p->is_in_stock();
+					?>
+						<td data-label="<?php esc_attr_e( 'Stock', 'dankcave' ); ?>">
+							<span class="dc-compare-table__chip dc-compare-table__chip--<?php echo $in_stock ? 'ok' : 'out'; ?>"><?php echo esc_html( $in_stock ? __( 'In stock', 'dankcave' ) : __( 'Sold out', 'dankcave' ) ); ?></span>
+						</td>
 					<?php endforeach; ?>
 				</tr>
 				<tr>
-					<th class="dc-compare-table__label"><?php esc_html_e( 'Rating', 'dankcave' ); ?></th>
+					<th class="dc-compare-table__label" scope="row"><?php esc_html_e( 'Rating', 'dankcave' ); ?></th>
 					<?php foreach ( $products as $p ) :
 						$avg = (float) $p->get_average_rating();
 						$count = (int) $p->get_review_count();
 					?>
-						<td><?php echo $count ? esc_html( number_format_i18n( $avg, 1 ) . ' ★ · ' . $count ) : '—'; ?></td>
+						<td data-label="<?php esc_attr_e( 'Rating', 'dankcave' ); ?>">
+							<?php if ( $count ) : ?>
+								<span class="dc-compare-table__rating"><?php echo esc_html( number_format_i18n( $avg, 1 ) ); ?> <span class="dc-compare-table__star" aria-hidden="true">★</span> <span class="dc-compare-table__count">(<?php echo esc_html( $count ); ?>)</span></span>
+							<?php else : ?>
+								<span class="dc-compare-table__empty">—</span>
+							<?php endif; ?>
+						</td>
 					<?php endforeach; ?>
 				</tr>
 				<?php foreach ( $attr_keys as $slug => $label ) : ?>
 					<tr>
-						<th class="dc-compare-table__label"><?php echo esc_html( $label ); ?></th>
+						<th class="dc-compare-table__label" scope="row"><?php echo esc_html( $label ); ?></th>
 						<?php foreach ( $products as $p ) :
 							$val = '—';
 							foreach ( $p->get_attributes() as $s => $a ) {
@@ -293,14 +333,16 @@ function dankcave_ajax_compare_table() {
 								}
 							}
 						?>
-							<td><?php echo esc_html( $val ); ?></td>
+							<td data-label="<?php echo esc_attr( $label ); ?>">
+								<?php echo '—' === $val ? '<span class="dc-compare-table__empty">—</span>' : esc_html( $val ); ?>
+							</td>
 						<?php endforeach; ?>
 					</tr>
 				<?php endforeach; ?>
-				<tr>
-					<th class="dc-compare-table__label"></th>
+				<tr class="dc-compare-table__row-cta">
+					<th class="dc-compare-table__label" scope="row"></th>
 					<?php foreach ( $products as $p ) : ?>
-						<td>
+						<td data-label="">
 							<a class="dc-compare-table__cta" href="<?php echo esc_url( $p->add_to_cart_url() ); ?>" data-quantity="1" data-product_id="<?php echo esc_attr( $p->get_id() ); ?>" rel="nofollow"><?php echo esc_html( $p->add_to_cart_text() ); ?></a>
 						</td>
 					<?php endforeach; ?>
@@ -421,36 +463,8 @@ function dankcave_checkout_inline_coupon() {
 }
 
 /**
- * Break the shipping methods out into their own card above payment, matching the design.
- * We suppress the default inline render (which sits between subtotal and total in the
- * order summary) and instead output it as a labelled card in the main column.
+ * Original Dankcave site had no visible shipping-method choice at checkout — only
+ * a single flat rate. We drop the dedicated shipping card and let WC auto-pick the
+ * first available rate in the background. Review-order template also skips the
+ * inline shipping row.
  */
-add_action( 'woocommerce_checkout_after_customer_details', 'dankcave_checkout_shipping_method_card', 5 );
-function dankcave_checkout_shipping_method_card() {
-	if ( ! WC()->cart || ! WC()->cart->needs_shipping() ) { return; }
-	$packages = WC()->shipping()->get_packages();
-	if ( empty( $packages ) ) { return; }
-	?>
-	<div class="dc-checkout-card dc-checkout-card--shipping-method">
-		<h3 class="dc-checkout-card__title"><?php esc_html_e( 'Shipping method', 'dankcave' ); ?></h3>
-		<?php foreach ( $packages as $i => $package ) :
-			$available = $package['rates'];
-			$chosen    = isset( WC()->session->get( 'chosen_shipping_methods' )[ $i ] ) ? WC()->session->get( 'chosen_shipping_methods' )[ $i ] : null;
-		?>
-			<ul id="shipping_method" class="dc-shipping-methods">
-				<?php foreach ( $available as $rate ) :
-					$id      = 'shipping_method_' . $i . '_' . sanitize_title( $rate->id );
-					$label   = wc_cart_totals_shipping_method_label( $rate );
-				?>
-					<li>
-						<label for="<?php echo esc_attr( $id ); ?>" class="dc-shipping-method">
-							<input type="radio" name="shipping_method[<?php echo esc_attr( $i ); ?>]" data-index="<?php echo esc_attr( $i ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $rate->id ); ?>" class="shipping_method" <?php checked( $rate->id, $chosen ); ?>>
-							<span class="dc-shipping-method__label"><?php echo wp_kses_post( $label ); ?></span>
-						</label>
-					</li>
-				<?php endforeach; ?>
-			</ul>
-		<?php endforeach; ?>
-	</div>
-	<?php
-}

@@ -85,29 +85,56 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		}
 	}
 
-	// PDP accordions: animate open/close with a max-height transition. The
-	// native <details> element snaps instantly, so we override the toggle,
-	// measure the body's scrollHeight, and interpolate.
-	document.querySelectorAll( '.pdp-accordion' ).forEach( function ( acc ) {
-		const summary = acc.querySelector( '.pdp-accordion__head' );
-		const body    = acc.querySelector( '.pdp-accordion__body' );
-		if ( ! summary || ! body ) { return; }
+	// Accordions: animate open/close with a max-height transition. The native
+	// <details> element snaps instantly, so we override the toggle and animate
+	// a wrapper around the content. Applies to every <details> on the site —
+	// PDP tabs, FAQ patterns, anything future. If a details already has an
+	// explicit .*__body child (like PDP), we use that; otherwise we auto-wrap
+	// everything after <summary> in a .dc-acc__body div so we have something
+	// to size.
+	document.querySelectorAll( 'details.pdp-accordion, details.pattern-contact__acc, details.wp-block-details' ).forEach( function ( acc ) {
+		if ( acc.dataset.dcAccInit === '1' ) { return; }
+		acc.dataset.dcAccInit = '1';
 
-		body.style.overflow = 'hidden';
-		body.style.transition = 'max-height .35s cubic-bezier(.2,.8,.2,1), opacity .25s ease, padding .3s ease';
+		const summary = acc.querySelector( 'summary, .pdp-accordion__head' );
+		if ( ! summary ) { return; }
+
+		let body = acc.querySelector( '.pdp-accordion__body' );
+		if ( ! body ) {
+			body = document.createElement( 'div' );
+			body.className = 'dc-acc__body';
+			// Move every sibling after <summary> into the wrapper.
+			let next = summary.nextSibling;
+			while ( next ) {
+				const move = next;
+				next = next.nextSibling;
+				body.appendChild( move );
+			}
+			acc.appendChild( body );
+		}
+
+		body.style.overflow   = 'hidden';
+		body.style.transition = 'max-height .35s cubic-bezier(.2,.8,.2,1), opacity .25s ease';
+
+		function measure() { return body.scrollHeight; }
 
 		function open() {
 			acc.open = true;
-			body.style.maxHeight = body.scrollHeight + 'px';
-			body.style.opacity = '1';
+			body.style.maxHeight = measure() + 'px';
+			body.style.opacity   = '1';
+			body.addEventListener( 'transitionend', function once( e ) {
+				if ( e.propertyName !== 'max-height' ) { return; }
+				body.style.maxHeight = 'none'; // allow content to grow naturally after opening
+				body.removeEventListener( 'transitionend', once );
+			} );
 		}
 		function close() {
-			body.style.maxHeight = body.scrollHeight + 'px';
-			// force reflow
-			void body.offsetHeight;
+			body.style.maxHeight = measure() + 'px';
+			void body.offsetHeight; // force reflow so the transition kicks
 			body.style.maxHeight = '0px';
-			body.style.opacity = '0';
-			body.addEventListener( 'transitionend', function once() {
+			body.style.opacity   = '0';
+			body.addEventListener( 'transitionend', function once( e ) {
+				if ( e.propertyName !== 'max-height' ) { return; }
 				acc.open = false;
 				body.removeEventListener( 'transitionend', once );
 			} );
@@ -116,10 +143,10 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		// Initial state — collapsed unless authored with `open`.
 		if ( acc.hasAttribute( 'open' ) ) {
 			body.style.maxHeight = 'none';
-			body.style.opacity = '1';
+			body.style.opacity   = '1';
 		} else {
 			body.style.maxHeight = '0px';
-			body.style.opacity = '0';
+			body.style.opacity   = '0';
 		}
 
 		summary.addEventListener( 'click', function ( e ) {
@@ -389,8 +416,33 @@ document.addEventListener( 'DOMContentLoaded', function () {
 	}
 	if ( compareModal ) {
 		document.querySelectorAll( '[data-dc-compare-close]' ).forEach( el => el.addEventListener( 'click', closeCompareModal ) );
+		// Backdrop click closes modal on mobile — big touch target.
+		const backdrop = compareModal.querySelector( '.dc-compare-modal__backdrop' );
+		if ( backdrop ) backdrop.addEventListener( 'click', closeCompareModal );
 		document.addEventListener( 'keydown', function ( e ) {
 			if ( e.key === 'Escape' && compareModal.getAttribute( 'data-open' ) === 'true' ) closeCompareModal();
+		} );
+		// Per-column remove — updates list, then either re-renders the table or
+		// closes the modal if the list is empty.
+		compareModal.addEventListener( 'click', function ( e ) {
+			const rm = e.target.closest( '[data-dc-compare-remove]' );
+			if ( ! rm ) return;
+			e.preventDefault();
+			const id = rm.getAttribute( 'data-dc-compare-remove' );
+			const list = readCompare();
+			const idx = list.indexOf( id );
+			if ( idx >= 0 ) list.splice( idx, 1 );
+			writeCompare( list );
+			paintCompareState();
+			if ( ! list.length ) { closeCompareModal(); return; }
+			// Re-render body with the shortened list.
+			const url = ( window.dcAjax && dcAjax.url ? dcAjax.url : '/wp-admin/admin-ajax.php' ) +
+				'?action=dankcave_compare_table&ids=' + encodeURIComponent( list.join( ',' ) );
+			compareBody.classList.add( 'is-refreshing' );
+			fetch( url, { credentials: 'same-origin' } )
+				.then( r => r.json() )
+				.then( json => { if ( json && json.success ) compareBody.innerHTML = json.data.html; compareBody.classList.remove( 'is-refreshing' ); } )
+				.catch( () => { compareBody.classList.remove( 'is-refreshing' ); } );
 		} );
 	}
 
