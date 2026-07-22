@@ -1,0 +1,10 @@
+import { chromium, devices } from 'playwright';
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 1280, height: 200 } });
+const p = await ctx.newPage();
+await p.goto('http://localhost:8090/', { waitUntil: 'load' });
+await p.waitForTimeout(500);
+await p.screenshot({ path: '/Users/christiandizon/Sites/dankcave/qa/screenshots/menu-with-contact.png' });
+const items = await p.$$eval('.primary-nav a', els => els.map(e => e.textContent.trim()));
+console.log('primary nav items:', items);
+await b.close();
