@@ -435,6 +435,38 @@ body.nav-open { overflow: hidden; }
 	margin: 0;
 }
 .newsletter-band__form { flex: none; }
+
+/* Social icons row inside the newsletter band */
+.dc-social {
+	list-style: none;
+	margin: 16px 0 0;
+	padding: 0;
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+.dc-social__link {
+	display: grid;
+	place-items: center;
+	width: 38px;
+	height: 38px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, .08);
+	border: 1px solid var(--ink-7);
+	color: rgba(255, 255, 255, .82);
+	text-decoration: none;
+	transition: background .18s, color .18s, transform .18s, border-color .18s;
+}
+.dc-social__link:hover {
+	background: var(--accent-wine);
+	border-color: var(--accent-wine);
+	color: #fff;
+	transform: translateY(-1px);
+}
+.dc-social__link:focus-visible {
+	outline: 2px solid #fff;
+	outline-offset: 2px;
+}
 .newsletter-band__placeholder {
 	display: flex;
 	gap: 10px;

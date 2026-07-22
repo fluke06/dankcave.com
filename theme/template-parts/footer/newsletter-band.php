@@ -15,6 +15,7 @@ $sc       = trim( (string) get_theme_mod( 'dankcave_newsletter_shortcode', '' ) 
 	<div class="newsletter-band__copy">
 		<h2 class="newsletter-band__heading" id="newsletter-band-heading"><?php echo esc_html( $heading ); ?></h2>
 		<p class="newsletter-band__subcopy"><?php echo esc_html( $subcopy ); ?></p>
+		<?php get_template_part( 'template-parts/footer/social-icons' ); ?>
 	</div>
 	<div class="newsletter-band__form">
 		<?php if ( $sc ) : ?>

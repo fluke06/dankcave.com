@@ -106,6 +106,32 @@ function dankcave_customize_register( $wp_customize ) {
 		) );
 	}
 
+	// -------------------- Social links --------------------
+	$wp_customize->add_section( 'dankcave_social', array(
+		'title'       => __( 'Social links', 'dankcave' ),
+		'description' => __( 'Public social profiles. Icons show up in the footer next to the newsletter form and are used by the "Follow us" CTA. Leave blank to hide the icon.', 'dankcave' ),
+		'priority'    => 42,
+	) );
+	$social_fields = array(
+		'dankcave_social_instagram' => array( 'label' => __( 'Instagram URL', 'dankcave' ), 'default' => 'https://www.instagram.com/dankcaveshop/' ),
+		'dankcave_social_facebook'  => array( 'label' => __( 'Facebook URL',  'dankcave' ), 'default' => 'https://www.facebook.com/dankcave' ),
+		'dankcave_social_tiktok'    => array( 'label' => __( 'TikTok URL',    'dankcave' ), 'default' => '' ),
+		'dankcave_social_twitter'   => array( 'label' => __( 'Twitter / X URL', 'dankcave' ), 'default' => '' ),
+		'dankcave_social_youtube'   => array( 'label' => __( 'YouTube URL',   'dankcave' ), 'default' => '' ),
+	);
+	foreach ( $social_fields as $id => $args ) {
+		$wp_customize->add_setting( $id, array(
+			'default'           => $args['default'],
+			'sanitize_callback' => 'esc_url_raw',
+			'transport'         => 'refresh',
+		) );
+		$wp_customize->add_control( $id, array(
+			'label'   => $args['label'],
+			'section' => 'dankcave_social',
+			'type'    => 'url',
+		) );
+	}
+
 	// -------------------- Footer copyright --------------------
 	$wp_customize->add_section( 'dankcave_footer', array(
 		'title'    => __( 'Footer legal bar', 'dankcave' ),
