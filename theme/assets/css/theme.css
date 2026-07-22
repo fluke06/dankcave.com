@@ -5176,14 +5176,52 @@ body.dc-drawer-open { overflow: hidden; }
 	align-items: center;
 	flex-wrap: wrap;
 }
-/* Variable products wrap qty + add-to-cart in .woocommerce-variation-add-to-cart
-   which is display:block by default. Force flex row so they sit side by side. */
+/* Variable products: 15px gap between the last variation select and the
+   qty + Add-to-cart row. Kill every default margin from WC's nested wrappers
+   (.variations table, .reset_variations_alert, .single_variation_wrap,
+   .woocommerce-variation) so nothing else adds space. */
+.dc-quickview__cart form.cart {
+	margin: 0 !important;
+	padding: 0 !important;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;   /* single source of truth for spacing between variations table and CTA row */
+}
+.dc-quickview__cart .variations {
+	margin: 0 !important;
+	padding: 0 !important;
+	border-collapse: collapse !important;
+	border-spacing: 0 !important;
+}
+.dc-quickview__cart .variations tbody { line-height: 0; }
+.dc-quickview__cart .variations tr { line-height: 1.4; }
+.dc-quickview__cart .reset_variations_alert { display: none !important; }
+.dc-quickview__cart .single_variation_wrap {
+	margin: 0 !important;
+	padding: 0 !important;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+/* .woocommerce-variation holds price/availability slots — empty until a
+   variation is picked. Set min-height:0 so it collapses when empty. */
+.dc-quickview__cart .woocommerce-variation {
+	margin: 0 !important;
+	padding: 0 !important;
+	min-height: 0 !important;
+	line-height: 0;
+}
+.dc-quickview__cart .woocommerce-variation:empty { display: none !important; }
+.dc-quickview__cart .woocommerce-variation > * {
+	line-height: 1.4;  /* restore for actual content when variation is picked */
+}
 .dc-quickview__cart .woocommerce-variation-add-to-cart {
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	flex-wrap: wrap;
-	margin-top: 10px;
+	margin: 0 !important;
+	padding: 0 !important;
 	width: 100%;
 }
 .dc-quickview__cart .woocommerce-variation-add-to-cart .quantity { flex: 0 0 auto; }
@@ -5263,8 +5301,14 @@ body.dc-drawer-open { overflow: hidden; }
 	margin-bottom: 8px;
 }
 .dc-quickview__cart .variations tbody,
-.dc-quickview__cart .variations tr { display: block; }
-.dc-quickview__cart .variations tr { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.dc-quickview__cart .variations tr {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-bottom: 0;   /* .variations wrapper already carries the 15px gap */
+}
+/* Trim the last-child spacing so the total below the select is exactly 15px */
+.dc-quickview__cart .variations tr:last-child { margin-bottom: 0; }
 .dc-quickview__cart .variations th {
 	display: block;
 	padding: 0;
@@ -5301,7 +5345,10 @@ body.dc-drawer-open { overflow: hidden; }
 	color: var(--accent-wine);
 	text-decoration: underline;
 	margin: 4px 0 0;
+	display: none;   /* hidden until a variation is picked — WC JS toggles this */
 }
+.dc-quickview__cart .reset_variations[style*="visible"],
+.dc-quickview__cart .reset_variations:not([style*="none"]):hover { display: inline-block; }
 .dc-quickview__cart .woocommerce-variation-price {
 	width: 100%;
 	font-family: var(--font-body);
