@@ -5176,6 +5176,41 @@ body.dc-drawer-open { overflow: hidden; }
 	align-items: center;
 	flex-wrap: wrap;
 }
+/* Variable products wrap qty + add-to-cart in .woocommerce-variation-add-to-cart
+   which is display:block by default. Force flex row so they sit side by side. */
+.dc-quickview__cart .woocommerce-variation-add-to-cart {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-top: 10px;
+	width: 100%;
+}
+.dc-quickview__cart .woocommerce-variation-add-to-cart .quantity { flex: 0 0 auto; }
+.dc-quickview__cart .woocommerce-variation-add-to-cart .single_add_to_cart_button {
+	flex: 1;
+	min-width: 200px;
+}
+/* Kill any leftover width:100% inheritance from other input rules that would
+   stretch the qty input across the whole card. */
+.dc-quickview__cart .quantity {
+	flex: 0 0 auto;
+	max-width: 140px;
+	width: auto;
+}
+.dc-quickview__cart .qty {
+	width: 56px !important;
+	max-width: 56px;
+}
+.dc-quickview__cart .woocommerce-variation-price {
+	width: 100%;
+	order: -1;   /* Price appears above the button row */
+}
+.dc-quickview__cart .woocommerce-variation-description,
+.dc-quickview__cart .woocommerce-variation-availability {
+	width: 100%;
+	order: -1;
+}
 .dc-quickview__cart .quantity {
 	display: flex;
 	background: #fff;
