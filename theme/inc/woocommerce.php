@@ -468,3 +468,14 @@ function dankcave_checkout_inline_coupon() {
  * first available rate in the background. Review-order template also skips the
  * inline shipping row.
  */
+
+/**
+ * Order-received page — our themed thankyou.php already renders the order items,
+ * billing, and shipping blocks. Unhook WC's default order-details-table callback
+ * on `woocommerce_thankyou` so the same content doesn't render twice.
+ */
+add_action( 'wp', function () {
+	if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) ) {
+		remove_action( 'woocommerce_thankyou', 'woocommerce_order_details_table', 10 );
+	}
+}, 5 );
