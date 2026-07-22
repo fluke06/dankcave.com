@@ -5,7 +5,7 @@
  * @package Dankcave
  */
 ?>
-	</div><!-- .site-content -->
+	</main><!-- #site-main -->
 
 	<?php get_template_part( 'template-parts/footer/newsletter-band' ); ?>
 	<?php get_template_part( 'template-parts/footer/legal-bar' ); ?>

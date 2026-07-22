@@ -15,6 +15,8 @@
 <body <?php body_class(); ?>>
 	<?php wp_body_open(); ?>
 
+	<a class="skip-link screen-reader-text" href="#site-main"><?php esc_html_e( 'Skip to main content', 'dankcave' ); ?></a>
+
 	<?php get_template_part( 'template-parts/header/site-header' ); ?>
 
-	<div class="site-content">
+	<main class="site-content" id="site-main">

@@ -123,7 +123,7 @@ if ( $is_ajax_addable ) {
 	<a class="product-card__link" href="<?php echo esc_url( $permalink ); ?>" aria-label="<?php echo esc_attr( $title ); ?>">
 		<div class="product-card__well">
 			<?php if ( $image_url ) : ?>
-				<img src="<?php echo esc_url( $image_url ); ?>" alt="" loading="lazy">
+				<img src="<?php echo esc_url( $image_url ); ?>" alt="" loading="lazy" width="600" height="600">
 			<?php endif; ?>
 		</div>
 		<div class="product-card__body">

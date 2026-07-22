@@ -5359,6 +5359,11 @@ body.dc-drawer-open { overflow: hidden; }
 	max-width: calc(100vw - 40px);
 }
 .dc-compare-tray[hidden] { display: none; }
+/* Hide the compare tray on cart / checkout / my-account — distracting during purchase. */
+body.woocommerce-cart .dc-compare-tray,
+body.woocommerce-checkout .dc-compare-tray,
+body.woocommerce-account .dc-compare-tray,
+body.woocommerce-order-received .dc-compare-tray { display: none !important; }
 .dc-compare-tray[data-visible="true"] {
 	opacity: 1;
 	transform: translateX(-50%) translateY(0);
@@ -5570,3 +5575,46 @@ body.dc-drawer-open { overflow: hidden; }
 	transition: background .18s;
 }
 .dc-compare-table__cta:hover { background: var(--accent-wine); }
+
+/* -----------------------------------------------------------------------------
+   Accessibility utilities
+----------------------------------------------------------------------------- */
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+.skip-link {
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	background: var(--ink-4);
+	color: #fff;
+	padding: 12px 20px;
+	border-radius: 0 0 14px 0;
+	font-weight: 700;
+	font-size: 14px;
+	text-decoration: none;
+	z-index: 999;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+	left: 0;
+	top: 0;
+	clip: auto;
+	clip-path: none;
+	width: auto;
+	height: auto;
+	overflow: visible;
+	position: fixed;
+	outline: 2px solid #fff;
+	outline-offset: -4px;
+}

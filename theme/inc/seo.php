@@ -238,16 +238,56 @@ function dankcave_seo_breadcrumb_ld( $product ) {
 }
 
 /**
+ * Demote H1 tags inside the_content() to H2 so each page has exactly one H1
+ * (the template-emitted title). Legacy content authored with H1 subheadings
+ * would otherwise duplicate the primary heading and confuse crawlers.
+ */
+add_filter( 'the_content', 'dankcave_demote_content_h1', 20 );
+function dankcave_demote_content_h1( $html ) {
+	if ( is_admin() ) { return $html; }
+	// WC pages (cart, checkout, my-account) DO need their content H1 to survive
+	// because our page.php bails and doesn't emit its own H1.
+	if ( function_exists( 'WC' ) && ( is_cart() || is_checkout() || is_account_page() ) ) {
+		return $html;
+	}
+	if ( is_singular( array( 'page', 'post', 'product' ) ) ) {
+		$html = preg_replace( '#<h1(\b[^>]*)>#i', '<h2$1>', $html );
+		$html = str_ireplace( '</h1>', '</h2>', $html );
+	}
+	return $html;
+}
+
+/**
  * Auto-fill meta description via Yoast's filter when the editor hasn't
  * authored one. Fixes empty meta descriptions on product / category / blog
  * pages without touching Yoast's other output.
  */
-add_filter( 'wpseo_metadesc', 'dankcave_seo_fallback_metadesc', 20 );
+add_filter( 'wpseo_metadesc', 'dankcave_seo_fallback_metadesc', 10000 );
+add_filter( 'wpseo_opengraph_desc', 'dankcave_seo_fallback_metadesc', 10000 );
+add_filter( 'wpseo_twitter_description', 'dankcave_seo_fallback_metadesc', 10000 );
 function dankcave_seo_fallback_metadesc( $desc ) {
-	if ( ! empty( $desc ) ) { return $desc; } // Yoast already has one
+	// Consider the description "empty" if Yoast is just handing us the raw
+	// content of a WooCommerce shortcode page (e.g. [woocommerce_cart]) or a
+	// stub too short to be useful.
+	$looks_junk = ! empty( $desc ) && ( preg_match( '/^\s*\[[a-z_]+\][\s]*$/i', trim( $desc ) ) || strlen( trim( $desc ) ) < 50 );
+	if ( ! empty( $desc ) && ! $looks_junk ) { return $desc; }
 
 	$site_name = get_bloginfo( 'name' );
-	if ( is_singular( 'product' ) && function_exists( 'wc_get_product' ) ) {
+	// Front page must be checked before is_page() — otherwise an empty static
+	// home page's content wins and returns nothing.
+	if ( is_home() || is_front_page() ) {
+		$desc = get_bloginfo( 'description' ) ?: __( 'Curated bongs, dab rigs, vapes, and rolling gear. Ships discreetly. Adults 21+.', 'dankcave' );
+	}
+	// WooCommerce shortcode pages MUST be checked before is_page() — otherwise
+	// they match as generic pages and get their description set to the raw
+	// shortcode text ([woocommerce_cart]).
+	elseif ( function_exists( 'is_cart' ) && is_cart() ) {
+		$desc = __( 'Review your bag and head to checkout. Free discreet shipping on qualifying orders. 30-day returns.', 'dankcave' );
+	} elseif ( function_exists( 'is_checkout' ) && is_checkout() ) {
+		$desc = __( 'Checkout securely. Encrypted, discreet packaging, statement shows DC Retail on your card.', 'dankcave' );
+	} elseif ( function_exists( 'is_account_page' ) && is_account_page() ) {
+		$desc = __( 'Sign in to your account or manage your orders, addresses, and preferences.', 'dankcave' );
+	} elseif ( is_singular( 'product' ) && function_exists( 'wc_get_product' ) ) {
 		$product = wc_get_product( get_the_ID() );
 		if ( $product ) {
 			$desc = wp_strip_all_tags( $product->get_short_description() ?: $product->get_description() );
@@ -263,18 +303,213 @@ function dankcave_seo_fallback_metadesc( $desc ) {
 		}
 	} elseif ( is_shop() ) {
 		$desc = __( 'Every piece we stock in one place: bongs, dab rigs, vapes, and the small tools that make them sing.', 'dankcave' );
-	} elseif ( is_home() || is_front_page() ) {
-		$desc = get_bloginfo( 'description' ) ?: __( 'Curated bongs, dab rigs, vapes, and rolling gear. Ships discreetly. Adults 21+.', 'dankcave' );
+	} elseif ( is_404() ) {
+		$desc = __( 'The page you followed does not exist. Head back to the shop or the journal.', 'dankcave' );
 	}
-	return trim( wp_trim_words( $desc, 30, '' ) );
+	// Trim to ~155 characters for meta description best practice (avoids
+	// Google truncating with ellipsis mid-sentence).
+	$desc = trim( wp_strip_all_tags( $desc ) );
+	if ( strlen( $desc ) > 155 ) {
+		$desc = substr( $desc, 0, 152 );
+		$desc = substr( $desc, 0, strrpos( $desc, ' ' ) ?: 152 ) . '…';
+	}
+	return $desc;
 }
 
 /**
- * Same for og:description + twitter:description — Yoast falls back to the meta
- * description when these are empty, but only if wpseo_metadesc returns a value.
+ * Ensure a canonical URL on 404 so crawlers don't pass link equity to a
+ * mistyped URL — point them back at the homepage.
  */
-add_filter( 'wpseo_opengraph_desc', 'dankcave_seo_fallback_metadesc', 20 );
-add_filter( 'wpseo_twitter_description', 'dankcave_seo_fallback_metadesc', 20 );
+add_action( 'wp_head', 'dankcave_seo_404_canonical', 2 );
+function dankcave_seo_404_canonical() {
+	if ( ! is_404() ) { return; }
+	if ( did_action( 'wp_head' ) < 1 ) { return; }
+	echo '<link rel="canonical" href="' . esc_url( home_url( '/' ) ) . '" data-source="dankcave" />' . "\n";
+}
+
+/**
+ * Backfill missing meta description, og:image, and twitter:image using output
+ * buffering. Runs at wp_head priority 999 so Yoast has already rendered.
+ * We only add the tag if the response doesn't already contain that meta name.
+ */
+// Buffer the entire page output so we can rewrite Yoast's junky descriptions
+// that come from cart/checkout page content (the shortcode itself). Yoast's
+// Indexable system stores per-post descriptions in the database and its
+// wpseo_metadesc filter is only consulted for empty values, so we intercept
+// the final HTML instead.
+add_action( 'template_redirect', 'dankcave_seo_full_response_buffer', 0 );
+function dankcave_seo_full_response_buffer() {
+	if ( is_admin() || is_feed() || wp_doing_ajax() || wp_doing_cron() ) { return; }
+	if ( 'GET' !== ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) { return; }
+	// Compute + stash the fallback description now while WP query state is fresh.
+	// The ob callback fires much later when is_cart() etc. may no longer work.
+	global $dankcave_seo_cached_desc;
+	$dankcave_seo_cached_desc = dankcave_seo_fallback_metadesc( '' );
+	ob_start( 'dankcave_seo_rewrite_head' );
+}
+function dankcave_seo_rewrite_head( $html ) {
+	if ( ! $html || false === strpos( $html, '<head' ) ) { return $html; }
+	global $dankcave_seo_cached_desc;
+	$fallback_desc = $dankcave_seo_cached_desc ?: '';
+
+	$html = preg_replace_callback(
+		'#<meta\s+(name|property)=(["\'])(description|og:description|twitter:description)\2\s+content=(["\'])([^"\']*)\4([^>]*)>#i',
+		function ( $m ) use ( $fallback_desc ) {
+			$attr = $m[1]; $name = $m[3]; $content = $m[5]; $tail = $m[6];
+			$looks_junk = ( strlen( $content ) < 50 ) || preg_match( '/^\s*\[[a-z_]+\]\s*$/', trim( $content ) );
+			if ( $looks_junk && $fallback_desc ) { $content = $fallback_desc; }
+			if ( strlen( $content ) > 155 ) {
+				$trim = substr( $content, 0, 152 );
+				$content = substr( $trim, 0, strrpos( $trim, ' ' ) ?: 152 ) . '…';
+			}
+			return '<meta ' . $attr . '="' . $name . '" content="' . esc_attr( $content ) . '"' . $tail . '>';
+		},
+		$html
+	);
+	return $html;
+}
+
+// The head-level buffer keeps working for pages Yoast doesn't emit description
+// tags for at all — it appends the missing tags before </head>.
+add_action( 'wp_head', 'dankcave_seo_start_buffer', -1 );
+add_action( 'wp_head', 'dankcave_seo_end_buffer',   9999 );
+function dankcave_seo_start_buffer() { ob_start(); }
+function dankcave_seo_end_buffer() {
+	if ( ob_get_level() < 1 ) { return; }
+	$head = ob_get_clean();
+	if ( ! is_string( $head ) ) { echo $head; return; }
+
+	// 1) Ensure a proper meta description: replace ugly ones (shortcodes,
+	//    empty, too short) with our fallback; trim overly long ones to ~155.
+	$fallback_desc = dankcave_seo_fallback_metadesc( '' );
+	$has_desc = ( strpos( $head, 'name="description"' ) !== false || strpos( $head, "name='description'" ) !== false );
+	if ( ! $has_desc ) {
+		if ( $fallback_desc ) {
+			$head .= '<meta name="description" content="' . esc_attr( $fallback_desc ) . '" data-source="dankcave" />' . "\n";
+			// Also add og:description + twitter:description while we're here
+			if ( strpos( $head, 'property="og:description"' ) === false ) {
+				$head .= '<meta property="og:description" content="' . esc_attr( $fallback_desc ) . '" data-source="dankcave" />' . "\n";
+			}
+			if ( strpos( $head, 'name="twitter:description"' ) === false ) {
+				$head .= '<meta name="twitter:description" content="' . esc_attr( $fallback_desc ) . '" data-source="dankcave" />' . "\n";
+			}
+		}
+	} else {
+		// Replace description content if it's junky (looks like a shortcode or is very short)
+		// AND trim overly-long ones to ~155.
+		$new_head = preg_replace_callback(
+			'#<meta\s+(name|property)=(["\'])(description|og:description|twitter:description)\2\s+content=(["\'])([^"\']*)\4([^>]*)>#i',
+			function ( $m ) use ( $fallback_desc ) {
+				$attr    = $m[1];
+				$name    = $m[3];
+				$content = $m[5];
+				$looks_junk = ( strlen( $content ) < 50 ) || preg_match( '/^\s*\[[a-z_]+\]\s*$/', $content );
+				if ( $looks_junk && $fallback_desc ) { $content = $fallback_desc; }
+				if ( strlen( $content ) > 155 ) {
+					$trim = substr( $content, 0, 152 );
+					$content = substr( $trim, 0, strrpos( $trim, ' ' ) ?: 152 ) . '…';
+				}
+				return '<meta ' . $attr . '="' . $name . '" content="' . esc_attr( $content ) . '"' . $m[6] . '>';
+			},
+			$head
+		);
+		if ( null !== $new_head ) { $head = $new_head; }
+	}
+
+	// 2) Fallback share image — hero / product image / logo
+	$share_image = dankcave_seo_fallback_share_image( '' );
+	if ( $share_image ) {
+		if ( strpos( $head, 'property="og:image"' ) === false ) {
+			$head .= '<meta property="og:image" content="' . esc_url( $share_image ) . '" data-source="dankcave" />' . "\n";
+		}
+		if ( strpos( $head, 'name="twitter:image"' ) === false ) {
+			$head .= '<meta name="twitter:image" content="' . esc_url( $share_image ) . '" data-source="dankcave" />' . "\n";
+		}
+	}
+
+	// 3) Ensure twitter:card is set (some templates skip it)
+	if ( strpos( $head, 'name="twitter:card"' ) === false ) {
+		$head .= '<meta name="twitter:card" content="summary_large_image" data-source="dankcave" />' . "\n";
+	}
+
+	echo $head; // phpcs:ignore
+}
+
+/**
+ * Emit Product JSON-LD on single-product pages if Yoast isn't already (Yoast
+ * Premium ships Product schema but only when "Enhanced product data" is on;
+ * on plain installs the graph tops out at WebPage). This is the biggest
+ * single SEO win for a WooCommerce store — enables Google Product rich cards.
+ */
+add_action( 'wp_head', 'dankcave_seo_product_schema', 5 );
+function dankcave_seo_product_schema() {
+	if ( ! is_singular( 'product' ) || ! function_exists( 'wc_get_product' ) ) { return; }
+	$product = wc_get_product( get_the_ID() );
+	if ( ! $product ) { return; }
+
+	// Skip if Yoast already emits Product (avoid duplicate schema)
+	global $wpseo_output_buffer_has_product_schema;
+	if ( $wpseo_output_buffer_has_product_schema ) { return; }
+
+	$offer = array(
+		'@type'         => 'Offer',
+		'url'           => get_permalink(),
+		'priceCurrency' => get_woocommerce_currency(),
+		'price'         => (string) $product->get_price(),
+		'availability'  => $product->is_in_stock() ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+		'itemCondition' => 'https://schema.org/NewCondition',
+		'priceValidUntil' => date( 'Y-m-d', strtotime( '+1 year' ) ),
+	);
+	$image = wp_get_attachment_image_url( $product->get_image_id(), 'large' );
+	$data = array(
+		'@context'    => 'https://schema.org',
+		'@type'       => 'Product',
+		'@id'         => get_permalink() . '#product',
+		'name'        => $product->get_name(),
+		'description' => wp_strip_all_tags( $product->get_short_description() ?: $product->get_description() ),
+		'sku'         => $product->get_sku() ?: (string) $product->get_id(),
+		'url'         => get_permalink(),
+		'brand'       => array( '@type' => 'Brand', 'name' => get_bloginfo( 'name' ) ),
+		'offers'      => $offer,
+	);
+	if ( $image ) { $data['image'] = $image; }
+	if ( $product->get_review_count() > 0 ) {
+		$data['aggregateRating'] = array(
+			'@type'       => 'AggregateRating',
+			'ratingValue' => (string) $product->get_average_rating(),
+			'reviewCount' => (int) $product->get_review_count(),
+		);
+	}
+	echo '<script type="application/ld+json" data-source="dankcave-product">' . wp_json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+}
+
+/**
+ * Fallback og:image + twitter:image for pages that don't have one.
+ * Yoast will use its site-wide fallback if configured, but many templates end
+ * up without an image tag entirely.
+ */
+add_filter( 'wpseo_opengraph_image', 'dankcave_seo_fallback_share_image', 20 );
+add_filter( 'wpseo_twitter_image', 'dankcave_seo_fallback_share_image', 20 );
+function dankcave_seo_fallback_share_image( $image ) {
+	if ( ! empty( $image ) ) { return $image; }
+
+	// Product/post/page featured image
+	if ( is_singular() && has_post_thumbnail() ) {
+		$img = wp_get_attachment_image_url( get_post_thumbnail_id(), 'large' );
+		if ( $img ) { return $img; }
+	}
+	// Custom theme mod (Customizer setting)
+	$mod = get_theme_mod( 'dankcave_share_image' );
+	if ( $mod ) { return $mod; }
+	// Site logo as last resort
+	$logo_id = get_theme_mod( 'custom_logo' );
+	if ( $logo_id ) {
+		$img = wp_get_attachment_image_url( $logo_id, 'full' );
+		if ( $img ) { return $img; }
+	}
+	return $image;
+}
+
 
 /**
  * /llms.txt — the emerging standard for exposing site content to LLMs.

@@ -43,7 +43,7 @@ if ( $post ) {
 <a class="blog-card" href="<?php echo esc_url( $permalink ); ?>">
 	<div class="blog-card__well">
 		<?php if ( $image_url ) : ?>
-			<img src="<?php echo esc_url( $image_url ); ?>" alt="" loading="lazy">
+			<img src="<?php echo esc_url( $image_url ); ?>" alt="" loading="lazy" width="720" height="450">
 		<?php endif; ?>
 	</div>
 	<div class="blog-card__body">

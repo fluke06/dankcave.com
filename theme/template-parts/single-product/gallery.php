@@ -41,7 +41,7 @@ $hero_url = $main_id
 					class="pdp-gallery__thumb<?php echo 0 === $i ? ' is-active' : ''; ?>"
 					data-full="<?php echo esc_url( $full_url ); ?>"
 					aria-label="<?php echo esc_attr( sprintf( __( 'View image %d', 'dankcave' ), $i + 1 ) ); ?>">
-					<img src="<?php echo esc_url( $thumb_url ); ?>" alt="" loading="lazy">
+					<img src="<?php echo esc_url( $thumb_url ); ?>" alt="" loading="lazy" width="150" height="150">
 				</button>
 			<?php endforeach; ?>
 		</div>
@@ -51,6 +51,6 @@ $hero_url = $main_id
 		<?php if ( $badge ) : ?>
 			<span class="pdp-gallery__badge"><?php echo esc_html( $badge ); ?></span>
 		<?php endif; ?>
-		<img class="pdp-gallery__image" data-pdp-hero src="<?php echo esc_url( $hero_url ); ?>" alt="<?php echo esc_attr( $product->get_name() ); ?>">
+		<img class="pdp-gallery__image" data-pdp-hero src="<?php echo esc_url( $hero_url ); ?>" alt="<?php echo esc_attr( $product->get_name() ); ?>" width="800" height="800" fetchpriority="high">
 	</div>
 </div>
