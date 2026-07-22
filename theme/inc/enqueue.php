@@ -54,6 +54,11 @@ function dankcave_enqueue_assets() {
 			DANKCAVE_VERSION,
 			array( 'in_footer' => true, 'strategy' => 'defer' )
 		);
+
+		// Load WC's add-to-cart-variation script on EVERY page so the quickview
+		// modal can wire up variation dropdowns for variable products (WC would
+		// normally only load it on the single product template).
+		wp_enqueue_script( 'wc-add-to-cart-variation' );
 	}
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {

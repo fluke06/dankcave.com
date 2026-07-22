@@ -248,6 +248,105 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		} );
 	} );
 
+	// Product card hover actions — Wishlist (localStorage), Compare (defer),
+	// Quick view (opens modal with fetched product HTML).
+	const wishlistKey = 'dc-wishlist';
+	function readWishlist() {
+		try { return JSON.parse( localStorage.getItem( wishlistKey ) || '[]' ); } catch (_) { return []; }
+	}
+	function writeWishlist( ids ) {
+		try { localStorage.setItem( wishlistKey, JSON.stringify( ids ) ); } catch (_) {}
+	}
+	function paintWishlistState() {
+		const list = readWishlist();
+		document.querySelectorAll( '[data-dc-wishlist]' ).forEach( btn => {
+			const id = btn.getAttribute( 'data-product-id' );
+			if ( list.includes( id ) ) btn.classList.add( 'is-active' );
+			else btn.classList.remove( 'is-active' );
+		} );
+	}
+	paintWishlistState();
+	document.addEventListener( 'click', function ( e ) {
+		const wish = e.target.closest( '[data-dc-wishlist]' );
+		if ( wish ) {
+			e.preventDefault();
+			const id = wish.getAttribute( 'data-product-id' );
+			const list = readWishlist();
+			const idx = list.indexOf( id );
+			if ( idx >= 0 ) list.splice( idx, 1 ); else list.push( id );
+			writeWishlist( list );
+			paintWishlistState();
+			return;
+		}
+		const compare = e.target.closest( '[data-dc-compare]' );
+		if ( compare ) {
+			e.preventDefault();
+			compare.classList.toggle( 'is-active' );
+			// Compare page/plugin not wired yet — visual toggle only for now.
+			return;
+		}
+	} );
+
+	// Quick view modal — opens on eye click OR on the "Options →" button of
+	// variable products (so users can pick a variation from the card).
+	const qv       = document.getElementById( 'dc-quickview' );
+	const qvBody   = qv ? qv.querySelector( '[data-dc-quickview-body]' ) : null;
+	function openQuickView( productId ) {
+		if ( ! qv || ! qvBody ) return;
+		qv.hidden = false;
+		qv.setAttribute( 'aria-hidden', 'false' );
+		requestAnimationFrame( () => qv.setAttribute( 'data-open', 'true' ) );
+		document.body.classList.add( 'dc-drawer-open' );
+		qvBody.innerHTML = '<div class="dc-quickview__loading">Loading…</div>';
+		const url = ( window.dcAjax && dcAjax.url ? dcAjax.url : '/wp-admin/admin-ajax.php' ) +
+			'?action=dankcave_quickview&product_id=' + encodeURIComponent( productId );
+		fetch( url, { credentials: 'same-origin' } )
+			.then( r => r.json() )
+			.then( json => {
+				if ( ! json || ! json.success ) {
+					qvBody.innerHTML = '<div class="dc-quickview__loading">Could not load this product.</div>';
+					return;
+				}
+				qvBody.innerHTML = json.data.html;
+				// Attach WC variations JS to the newly-injected form.
+				if ( window.jQuery ) {
+					const form = qvBody.querySelector( 'form.variations_form' );
+					if ( form ) window.jQuery( form ).wc_variation_form();
+				}
+			} )
+			.catch( () => { qvBody.innerHTML = '<div class="dc-quickview__loading">Network error.</div>'; } );
+	}
+	function closeQuickView() {
+		if ( ! qv ) return;
+		qv.removeAttribute( 'data-open' );
+		qv.setAttribute( 'aria-hidden', 'true' );
+		setTimeout( () => { qv.hidden = true; qvBody && ( qvBody.innerHTML = '' ); }, 300 );
+		document.body.classList.remove( 'dc-drawer-open' );
+	}
+	if ( qv ) {
+		document.querySelectorAll( '[data-dc-quickview-close]' ).forEach( el => el.addEventListener( 'click', closeQuickView ) );
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key === 'Escape' && qv.getAttribute( 'data-open' ) === 'true' ) closeQuickView();
+		} );
+	}
+	document.addEventListener( 'click', function ( e ) {
+		const qvBtn = e.target.closest( '[data-dc-quickview]' );
+		if ( qvBtn ) {
+			e.preventDefault();
+			openQuickView( qvBtn.getAttribute( 'data-product-id' ) );
+		}
+	} );
+	// Intercept "Options →" clicks on variable products so they open QV instead.
+	document.addEventListener( 'click', function ( e ) {
+		const opt = e.target.closest( '.product-card__add--needs-options' );
+		if ( opt ) {
+			e.preventDefault();
+			const card = opt.closest( '.product-card' );
+			const id = card ? card.getAttribute( 'data-product-id' ) : null;
+			if ( id ) openQuickView( id );
+		}
+	} );
+
 	// Cart drawer — slides in from the right on cart click or after AJAX add.
 	const drawer = document.getElementById( 'dc-cart-drawer' );
 	function openDrawer() {

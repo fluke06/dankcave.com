@@ -42,13 +42,20 @@ if ( $product ) {
 	$avg_rating   = (float) $product->get_average_rating();
 	$review_count = (int) $product->get_review_count();
 
-	// "Add" behaviour depends on product type.
-	// WC returns the right add-to-cart URL for simple / variable / grouped / external.
-	$add_url = $product->add_to_cart_url();
-	// Only simple, in-stock products get the fast "Add +" affordance.
-	// Everything else routes the customer to the product page for variation selection.
-	$is_ajax_addable = ( 'simple' === $product->get_type() ) && $product->is_purchasable() && $product->is_in_stock();
-	$add_label = $is_ajax_addable ? __( 'Add +', 'dankcave' ) : __( 'Options →', 'dankcave' );
+	// "Add" behaviour depends on product type + stock.
+	$add_url         = $product->add_to_cart_url();
+	$product_type    = $product->get_type();
+	$is_ajax_addable = ( 'simple' === $product_type ) && $product->is_purchasable() && $product->is_in_stock();
+	$needs_options   = in_array( $product_type, array( 'variable', 'grouped' ), true );
+	if ( $is_ajax_addable ) {
+		$add_label = __( 'Add +', 'dankcave' );
+	} elseif ( $needs_options ) {
+		$add_label = __( 'Options →', 'dankcave' );
+	} elseif ( ! $product->is_in_stock() ) {
+		$add_label = __( 'Sold out', 'dankcave' );
+	} else {
+		$add_label = __( 'View →', 'dankcave' );
+	}
 
 	// Eyebrow: prefer arg, then post meta, then primary category name
 	$eyebrow = $args['eyebrow'];
@@ -78,11 +85,39 @@ if ( $product ) {
 
 $badge = $args['badge'] ?: ( $demo['badge'] ?? '' );
 
-$add_classes = 'product-card__add' . ( $is_ajax_addable ? ' add_to_cart_button ajax_add_to_cart' : '' );
+$add_classes = 'product-card__add';
+if ( $is_ajax_addable ) {
+	$add_classes .= ' add_to_cart_button ajax_add_to_cart';
+} elseif ( $needs_options ) {
+	$add_classes .= ' product-card__add--needs-options';
+} elseif ( ! $product->is_in_stock() ) {
+	$add_classes .= ' product-card__add--sold-out';
+}
 ?>
-<article class="product-card">
+<article class="product-card" data-product-id="<?php echo esc_attr( $pid ); ?>">
 	<?php if ( $badge ) : ?>
 		<span class="product-card__badge"><?php echo esc_html( $badge ); ?></span>
+	<?php endif; ?>
+
+	<?php if ( $product ) : ?>
+		<div class="product-card__hover-actions" aria-hidden="true">
+			<button type="button" class="product-card__hover-btn" data-dc-wishlist data-product-id="<?php echo esc_attr( $pid ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Add %s to wishlist', 'dankcave' ), $title ) ); ?>">
+				<svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+					<path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M10 17s-6.5-4.35-6.5-8.5A3.5 3.5 0 0 1 10 6a3.5 3.5 0 0 1 6.5 2.5C16.5 12.65 10 17 10 17z"/>
+				</svg>
+			</button>
+			<button type="button" class="product-card__hover-btn" data-dc-compare data-product-id="<?php echo esc_attr( $pid ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Compare %s', 'dankcave' ), $title ) ); ?>">
+				<svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+					<path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 6h9m-2-3l3 3-3 3M16 14H7m2 3l-3-3 3-3"/>
+				</svg>
+			</button>
+			<button type="button" class="product-card__hover-btn" data-dc-quickview data-product-id="<?php echo esc_attr( $pid ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Quick view %s', 'dankcave' ), $title ) ); ?>">
+				<svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+					<path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M1.5 10s3-5.5 8.5-5.5 8.5 5.5 8.5 5.5-3 5.5-8.5 5.5S1.5 10 1.5 10z"/>
+					<circle cx="10" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+				</svg>
+			</button>
+		</div>
 	<?php endif; ?>
 
 	<a class="product-card__link" href="<?php echo esc_url( $permalink ); ?>" aria-label="<?php echo esc_attr( $title ); ?>">

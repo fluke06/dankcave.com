@@ -130,6 +130,65 @@ function dankcave_checkout_inline_login( $checkout ) {
 }
 
 // -----------------------------------------------------------------------------
+// Quick-view AJAX endpoint. Returns an HTML fragment for the modal so the
+// same summary component works for simple + variable products (variable-form
+// JS attaches automatically via WC's variations_form init).
+// -----------------------------------------------------------------------------
+add_action( 'wp_ajax_dankcave_quickview',        'dankcave_ajax_quickview' );
+add_action( 'wp_ajax_nopriv_dankcave_quickview', 'dankcave_ajax_quickview' );
+function dankcave_ajax_quickview() {
+	$product_id = isset( $_GET['product_id'] ) ? (int) $_GET['product_id'] : 0;
+	$product    = $product_id ? wc_get_product( $product_id ) : null;
+	if ( ! $product ) {
+		wp_send_json_error( array( 'message' => 'Product not found' ), 404 );
+	}
+	// Set global product so WC's template functions target this product.
+	$GLOBALS['product'] = $product;
+	$GLOBALS['post']    = get_post( $product_id );
+	setup_postdata( $GLOBALS['post'] );
+
+	$image_id  = $product->get_image_id();
+	$image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : wc_placeholder_img_src( 'large' );
+	$categories = wc_get_product_category_list( $product_id, ', ' );
+	$categories_text = wp_strip_all_tags( $categories );
+
+	ob_start();
+	?>
+	<div class="dc-quickview__grid">
+		<div class="dc-quickview__media">
+			<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $product->get_name() ); ?>">
+		</div>
+		<div class="dc-quickview__summary">
+			<?php if ( $categories_text ) : ?>
+				<div class="dc-quickview__eyebrow"><?php echo esc_html( strtoupper( $categories_text ) ); ?></div>
+			<?php endif; ?>
+			<h2 class="dc-quickview__title"><?php echo esc_html( $product->get_name() ); ?></h2>
+			<div class="dc-quickview__price"><?php echo $product->get_price_html(); // phpcs:ignore ?></div>
+			<?php if ( $product->get_short_description() ) : ?>
+				<div class="dc-quickview__short"><?php echo apply_filters( 'woocommerce_short_description', $product->get_short_description() ); // phpcs:ignore ?></div>
+			<?php endif; ?>
+			<div class="dc-quickview__cart">
+				<?php woocommerce_template_single_add_to_cart(); ?>
+			</div>
+			<a class="dc-quickview__view-full" href="<?php echo esc_url( $product->get_permalink() ); ?>"><?php esc_html_e( 'View full details →', 'dankcave' ); ?></a>
+		</div>
+	</div>
+	<?php
+	wp_reset_postdata();
+	$html = ob_get_clean();
+	wp_send_json_success( array( 'html' => $html ) );
+}
+
+// Pass the ajax URL to the frontend JS
+add_action( 'wp_enqueue_scripts', 'dankcave_localize_quickview', 20 );
+function dankcave_localize_quickview() {
+	wp_localize_script( 'dankcave', 'dcAjax', array(
+		'url'   => admin_url( 'admin-ajax.php' ),
+		'nonce' => wp_create_nonce( 'dc-quickview' ),
+	) );
+}
+
+// -----------------------------------------------------------------------------
 // Cart drawer (right-side slide-in). Renders its own contents via helper fns so
 // the same markup can be re-rendered inside woocommerce_add_to_cart_fragments
 // after an AJAX add-to-cart.
