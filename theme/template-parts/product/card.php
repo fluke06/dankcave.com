@@ -101,17 +101,17 @@ if ( $is_ajax_addable ) {
 
 	<?php if ( $product ) : ?>
 		<div class="product-card__hover-actions" aria-hidden="true">
-			<button type="button" class="product-card__hover-btn" data-dc-wishlist data-product-id="<?php echo esc_attr( $pid ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Add %s to wishlist', 'dankcave' ), $title ) ); ?>">
+			<button type="button" class="product-card__hover-btn dc-tooltip" data-dc-wishlist data-product-id="<?php echo esc_attr( $pid ); ?>" data-tooltip="<?php esc_attr_e( 'Add to wishlist', 'dankcave' ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Add %s to wishlist', 'dankcave' ), $title ) ); ?>">
 				<svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
 					<path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M10 17s-6.5-4.35-6.5-8.5A3.5 3.5 0 0 1 10 6a3.5 3.5 0 0 1 6.5 2.5C16.5 12.65 10 17 10 17z"/>
 				</svg>
 			</button>
-			<button type="button" class="product-card__hover-btn" data-dc-compare data-product-id="<?php echo esc_attr( $pid ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Compare %s', 'dankcave' ), $title ) ); ?>">
+			<button type="button" class="product-card__hover-btn dc-tooltip" data-dc-compare data-product-id="<?php echo esc_attr( $pid ); ?>" data-tooltip="<?php esc_attr_e( 'Add to compare', 'dankcave' ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Compare %s', 'dankcave' ), $title ) ); ?>">
 				<svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
 					<path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 6h9m-2-3l3 3-3 3M16 14H7m2 3l-3-3 3-3"/>
 				</svg>
 			</button>
-			<button type="button" class="product-card__hover-btn" data-dc-quickview data-product-id="<?php echo esc_attr( $pid ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Quick view %s', 'dankcave' ), $title ) ); ?>">
+			<button type="button" class="product-card__hover-btn dc-tooltip" data-dc-quickview data-product-id="<?php echo esc_attr( $pid ); ?>" data-tooltip="<?php esc_attr_e( 'Quick view', 'dankcave' ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Quick view %s', 'dankcave' ), $title ) ); ?>">
 				<svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
 					<path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M1.5 10s3-5.5 8.5-5.5 8.5 5.5 8.5 5.5-3 5.5-8.5 5.5S1.5 10 1.5 10z"/>
 					<circle cx="10" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>

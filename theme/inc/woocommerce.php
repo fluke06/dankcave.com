@@ -189,6 +189,130 @@ function dankcave_localize_quickview() {
 }
 
 // -----------------------------------------------------------------------------
+// Compare — minimal product-comparison endpoint. Given a list of product IDs
+// (from localStorage on the frontend), return thumbs for the floating tray or
+// a side-by-side attribute table for the modal.
+// -----------------------------------------------------------------------------
+add_action( 'wp_ajax_dankcave_compare_thumbs',        'dankcave_ajax_compare_thumbs' );
+add_action( 'wp_ajax_nopriv_dankcave_compare_thumbs', 'dankcave_ajax_compare_thumbs' );
+function dankcave_ajax_compare_thumbs() {
+	$ids = isset( $_GET['ids'] ) ? array_map( 'intval', explode( ',', wp_unslash( $_GET['ids'] ) ) ) : array();
+	$ids = array_filter( $ids );
+	ob_start();
+	foreach ( $ids as $pid ) {
+		$product = wc_get_product( $pid );
+		if ( ! $product ) { continue; }
+		$img = wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_thumbnail' );
+		if ( ! $img ) { $img = wc_placeholder_img_src( 'woocommerce_thumbnail' ); }
+		?>
+		<div class="dc-compare-tray__thumb" data-product-id="<?php echo esc_attr( $pid ); ?>" title="<?php echo esc_attr( $product->get_name() ); ?>">
+			<img src="<?php echo esc_url( $img ); ?>" alt="">
+			<button type="button" class="dc-compare-tray__thumb-remove" data-product-id="<?php echo esc_attr( $pid ); ?>" aria-label="<?php esc_attr_e( 'Remove from compare', 'dankcave' ); ?>">×</button>
+		</div>
+		<?php
+	}
+	wp_send_json_success( array( 'html' => ob_get_clean() ) );
+}
+
+add_action( 'wp_ajax_dankcave_compare_table',        'dankcave_ajax_compare_table' );
+add_action( 'wp_ajax_nopriv_dankcave_compare_table', 'dankcave_ajax_compare_table' );
+function dankcave_ajax_compare_table() {
+	$ids = isset( $_GET['ids'] ) ? array_map( 'intval', explode( ',', wp_unslash( $_GET['ids'] ) ) ) : array();
+	$products = array();
+	foreach ( array_filter( $ids ) as $pid ) {
+		$p = wc_get_product( $pid );
+		if ( $p ) { $products[] = $p; }
+	}
+	if ( empty( $products ) ) {
+		wp_send_json_success( array( 'html' => '<p class="dc-compare-empty">' . esc_html__( 'Nothing to compare yet. Add products with the compare icon on a card.', 'dankcave' ) . '</p>' ) );
+	}
+
+	// Collect the union of visible attributes across all products so we can
+	// build a consistent set of rows.
+	$attr_keys = array();
+	foreach ( $products as $p ) {
+		foreach ( $p->get_attributes() as $slug => $attribute ) {
+			if ( ! is_a( $attribute, 'WC_Product_Attribute' ) || ! $attribute->get_visible() ) { continue; }
+			$attr_keys[ $slug ] = wc_attribute_label( $attribute->get_name(), $p );
+		}
+	}
+
+	ob_start();
+	?>
+	<div class="dc-compare-table-wrap">
+		<table class="dc-compare-table">
+			<thead>
+				<tr>
+					<th class="dc-compare-table__label"></th>
+					<?php foreach ( $products as $p ) : ?>
+						<th class="dc-compare-table__head">
+							<a href="<?php echo esc_url( $p->get_permalink() ); ?>">
+								<div class="dc-compare-table__thumb">
+									<img src="<?php echo esc_url( wp_get_attachment_image_url( $p->get_image_id(), 'medium' ) ?: wc_placeholder_img_src( 'medium' ) ); ?>" alt="">
+								</div>
+								<div class="dc-compare-table__name"><?php echo esc_html( $p->get_name() ); ?></div>
+							</a>
+						</th>
+					<?php endforeach; ?>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th class="dc-compare-table__label"><?php esc_html_e( 'Price', 'dankcave' ); ?></th>
+					<?php foreach ( $products as $p ) : ?>
+						<td><?php echo $p->get_price_html(); // phpcs:ignore ?></td>
+					<?php endforeach; ?>
+				</tr>
+				<tr>
+					<th class="dc-compare-table__label"><?php esc_html_e( 'Stock', 'dankcave' ); ?></th>
+					<?php foreach ( $products as $p ) : ?>
+						<td><?php echo esc_html( $p->is_in_stock() ? __( 'In stock', 'dankcave' ) : __( 'Sold out', 'dankcave' ) ); ?></td>
+					<?php endforeach; ?>
+				</tr>
+				<tr>
+					<th class="dc-compare-table__label"><?php esc_html_e( 'Rating', 'dankcave' ); ?></th>
+					<?php foreach ( $products as $p ) :
+						$avg = (float) $p->get_average_rating();
+						$count = (int) $p->get_review_count();
+					?>
+						<td><?php echo $count ? esc_html( number_format_i18n( $avg, 1 ) . ' ★ · ' . $count ) : '—'; ?></td>
+					<?php endforeach; ?>
+				</tr>
+				<?php foreach ( $attr_keys as $slug => $label ) : ?>
+					<tr>
+						<th class="dc-compare-table__label"><?php echo esc_html( $label ); ?></th>
+						<?php foreach ( $products as $p ) :
+							$val = '—';
+							foreach ( $p->get_attributes() as $s => $a ) {
+								if ( $s !== $slug ) { continue; }
+								if ( $a->is_taxonomy() ) {
+									$terms = wc_get_product_terms( $p->get_id(), $a->get_name(), array( 'fields' => 'names' ) );
+									$val = $terms ? implode( ', ', $terms ) : '—';
+								} else {
+									$val = implode( ', ', $a->get_options() ) ?: '—';
+								}
+							}
+						?>
+							<td><?php echo esc_html( $val ); ?></td>
+						<?php endforeach; ?>
+					</tr>
+				<?php endforeach; ?>
+				<tr>
+					<th class="dc-compare-table__label"></th>
+					<?php foreach ( $products as $p ) : ?>
+						<td>
+							<a class="dc-compare-table__cta" href="<?php echo esc_url( $p->add_to_cart_url() ); ?>" data-quantity="1" data-product_id="<?php echo esc_attr( $p->get_id() ); ?>" rel="nofollow"><?php echo esc_html( $p->add_to_cart_text() ); ?></a>
+						</td>
+					<?php endforeach; ?>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<?php
+	wp_send_json_success( array( 'html' => ob_get_clean() ) );
+}
+
+// -----------------------------------------------------------------------------
 // Cart drawer (right-side slide-in). Renders its own contents via helper fns so
 // the same markup can be re-rendered inside woocommerce_add_to_cart_fragments
 // after an AJAX add-to-cart.

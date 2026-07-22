@@ -281,11 +281,118 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		const compare = e.target.closest( '[data-dc-compare]' );
 		if ( compare ) {
 			e.preventDefault();
-			compare.classList.toggle( 'is-active' );
-			// Compare page/plugin not wired yet — visual toggle only for now.
+			toggleCompare( compare.getAttribute( 'data-product-id' ) );
 			return;
 		}
 	} );
+
+	// -------------------------------------------------------------------------
+	// Compare — localStorage backed, floating tray at the bottom, click to open
+	// a side-by-side attribute modal.
+	// -------------------------------------------------------------------------
+	const compareKey  = 'dc-compare';
+	const compareMax  = 4;
+	const tray        = document.getElementById( 'dc-compare-tray' );
+	const trayThumbs  = tray ? tray.querySelector( '[data-dc-compare-thumbs]' ) : null;
+	const trayCount   = tray ? tray.querySelector( '[data-dc-compare-count]' ) : null;
+	const compareModal = document.getElementById( 'dc-compare-modal' );
+	const compareBody  = compareModal ? compareModal.querySelector( '[data-dc-compare-body]' ) : null;
+
+	function readCompare() {
+		try { return JSON.parse( localStorage.getItem( compareKey ) || '[]' ); } catch (_) { return []; }
+	}
+	function writeCompare( ids ) {
+		try { localStorage.setItem( compareKey, JSON.stringify( ids ) ); } catch (_) {}
+	}
+	function paintCompareState() {
+		const list = readCompare();
+		document.querySelectorAll( '[data-dc-compare]' ).forEach( btn => {
+			const id = btn.getAttribute( 'data-product-id' );
+			if ( list.includes( id ) ) { btn.classList.add( 'is-active' ); btn.setAttribute( 'data-tooltip', 'In compare' ); }
+			else { btn.classList.remove( 'is-active' ); btn.setAttribute( 'data-tooltip', 'Add to compare' ); }
+		} );
+		if ( trayCount ) trayCount.textContent = list.length;
+		if ( ! tray ) return;
+		if ( list.length === 0 ) {
+			tray.removeAttribute( 'data-visible' );
+			setTimeout( () => { tray.hidden = true; }, 200 );
+			return;
+		}
+		tray.hidden = false;
+		requestAnimationFrame( () => tray.setAttribute( 'data-visible', 'true' ) );
+		// Fetch thumb HTML for the current list
+		if ( trayThumbs ) {
+			const url = ( window.dcAjax && dcAjax.url ? dcAjax.url : '/wp-admin/admin-ajax.php' ) +
+				'?action=dankcave_compare_thumbs&ids=' + encodeURIComponent( list.join( ',' ) );
+			fetch( url, { credentials: 'same-origin' } )
+				.then( r => r.json() )
+				.then( json => { if ( json && json.success ) trayThumbs.innerHTML = json.data.html; } )
+				.catch( () => {} );
+		}
+	}
+	function toggleCompare( id ) {
+		const list = readCompare();
+		const idx = list.indexOf( id );
+		if ( idx >= 0 ) {
+			list.splice( idx, 1 );
+		} else {
+			if ( list.length >= compareMax ) {
+				alert( 'You can compare up to ' + compareMax + ' products at a time.' );
+				return;
+			}
+			list.push( id );
+		}
+		writeCompare( list );
+		paintCompareState();
+	}
+	paintCompareState();
+
+	// Tray thumb remove
+	if ( tray ) {
+		tray.addEventListener( 'click', function ( e ) {
+			const rm = e.target.closest( '.dc-compare-tray__thumb-remove' );
+			if ( rm ) {
+				toggleCompare( rm.getAttribute( 'data-product-id' ) );
+				return;
+			}
+			const clr = e.target.closest( '[data-dc-compare-clear]' );
+			if ( clr ) { writeCompare( [] ); paintCompareState(); return; }
+			const open = e.target.closest( '[data-dc-compare-open]' );
+			if ( open ) { openCompareModal(); return; }
+		} );
+	}
+
+	function openCompareModal() {
+		if ( ! compareModal || ! compareBody ) return;
+		const list = readCompare();
+		if ( ! list.length ) return;
+		compareModal.hidden = false;
+		compareModal.setAttribute( 'aria-hidden', 'false' );
+		requestAnimationFrame( () => compareModal.setAttribute( 'data-open', 'true' ) );
+		document.body.classList.add( 'dc-drawer-open' );
+		compareBody.innerHTML = '<div class="dc-quickview__loading">Loading…</div>';
+		const url = ( window.dcAjax && dcAjax.url ? dcAjax.url : '/wp-admin/admin-ajax.php' ) +
+			'?action=dankcave_compare_table&ids=' + encodeURIComponent( list.join( ',' ) );
+		fetch( url, { credentials: 'same-origin' } )
+			.then( r => r.json() )
+			.then( json => { if ( json && json.success ) compareBody.innerHTML = json.data.html; } )
+			.catch( () => { compareBody.innerHTML = '<div class="dc-quickview__loading">Network error.</div>'; } );
+	}
+	function closeCompareModal() {
+		if ( ! compareModal ) return;
+		compareModal.removeAttribute( 'data-open' );
+		compareModal.setAttribute( 'aria-hidden', 'true' );
+		setTimeout( () => { compareModal.hidden = true; compareBody && ( compareBody.innerHTML = '' ); }, 300 );
+		if ( ! document.getElementById( 'dc-cart-drawer' )?.getAttribute( 'data-open' ) && ! document.getElementById( 'dc-quickview' )?.getAttribute( 'data-open' ) ) {
+			document.body.classList.remove( 'dc-drawer-open' );
+		}
+	}
+	if ( compareModal ) {
+		document.querySelectorAll( '[data-dc-compare-close]' ).forEach( el => el.addEventListener( 'click', closeCompareModal ) );
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key === 'Escape' && compareModal.getAttribute( 'data-open' ) === 'true' ) closeCompareModal();
+		} );
+	}
 
 	// Quick view modal — opens on eye click OR on the "Options →" button of
 	// variable products (so users can pick a variation from the card).
