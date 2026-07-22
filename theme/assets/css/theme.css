@@ -5199,9 +5199,8 @@ body.dc-drawer-open { overflow: hidden; }
 .dc-quickview__cart .single_variation_wrap {
 	margin: 0 !important;
 	padding: 0 !important;
-	display: flex;
-	flex-direction: column;
-	gap: 0;
+	display: block;
+	width: 100%;
 }
 /* .woocommerce-variation holds price/availability slots — empty until a
    variation is picked. Set min-height:0 so it collapses when empty. */
@@ -5216,13 +5215,15 @@ body.dc-drawer-open { overflow: hidden; }
 	line-height: 1.4;  /* restore for actual content when variation is picked */
 }
 .dc-quickview__cart .woocommerce-variation-add-to-cart {
-	display: flex;
+	display: flex !important;
 	gap: 10px;
 	align-items: center;
+	justify-content: flex-start;
 	flex-wrap: wrap;
 	margin: 0 !important;
 	padding: 0 !important;
-	width: 100%;
+	width: 100% !important;
+	align-self: stretch;
 }
 .dc-quickview__cart .woocommerce-variation-add-to-cart .quantity { flex: 0 0 auto; }
 .dc-quickview__cart .woocommerce-variation-add-to-cart .single_add_to_cart_button {
