@@ -6903,7 +6903,9 @@ body.woocommerce-order-received .dc-compare-tray { display: none !important; }
    ============================================================================= */
 .dc-legal { background: var(--cream-100); counter-reset: dc-section; }
 
-.dc-legal__progress {
+/* Landing-template scroll progress bar (emitted by page-templates/landing.php
+   for legal pages, kept out of the block content so the pattern is 100% blocks) */
+.dc-landing-progress {
 	position: sticky;
 	top: 74px;
 	z-index: 15;
@@ -6912,7 +6914,7 @@ body.woocommerce-order-received .dc-compare-tray { display: none !important; }
 	pointer-events: none;
 	margin: 0;
 }
-.dc-legal__progress-bar {
+.dc-landing-progress__bar {
 	height: 100%;
 	width: 0%;
 	background: #f8c913;

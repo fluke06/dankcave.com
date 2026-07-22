@@ -85,10 +85,11 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		}
 	}
 
-	// Legal-page scroll progress bar — thin yellow bar that fills as the user
+	// Landing scroll progress bar — thin yellow bar that fills as the user
 	// scrolls. Cheap: one scroll listener that reads scrollHeight/clientHeight.
+	// Emitted by page-templates/landing.php on long-form pages (legal pages).
 	( function () {
-		const bar = document.querySelector( '.dc-legal__progress-bar' );
+		const bar = document.querySelector( '.dc-landing-progress__bar' );
 		if ( ! bar ) return;
 		const paint = function () {
 			const h   = document.documentElement;

@@ -121,10 +121,6 @@ return ( function () {
 	return '
 <!-- wp:group {"className":"dc-legal","align":"full","tagName":"section"} -->
 <section class="wp-block-group alignfull dc-legal">
-<!-- wp:html -->
-<div class="dc-legal__progress"><div class="dc-legal__progress-bar"></div></div>
-<!-- /wp:html -->
-
 <!-- wp:group {"className":"dc-legal__hero"} -->
 <div class="wp-block-group dc-legal__hero">
 <!-- wp:heading {"level":1,"className":"dc-legal__title"} -->
