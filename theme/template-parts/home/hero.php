@@ -26,7 +26,7 @@ $cal_body   = get_theme_mod( 'dankcave_hero_callout_body', "Ceramic-coil vapor.\
 			<span><?php echo esc_html( $left_2 ); ?></span>
 		</h1>
 
-		<img class="hero__product" src="<?php echo esc_url( $hero_img ); ?>" alt="<?php echo esc_attr( $hero_alt ); ?>" loading="eager" fetchpriority="high">
+		<img class="hero__product skip-lazy no-lazyload" src="<?php echo esc_url( $hero_img ); ?>" alt="<?php echo esc_attr( $hero_alt ); ?>" width="560" height="800" loading="eager" fetchpriority="high" decoding="async">
 
 		<div class="hero__callout" role="complementary">
 			<div class="hero__callout-title"><?php echo esc_html( $cal_title ); ?></div>

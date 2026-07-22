@@ -24,5 +24,6 @@ require_once DANKCAVE_DIR . 'inc/customizer.php';
 require_once DANKCAVE_DIR . 'inc/block-patterns.php';
 require_once DANKCAVE_DIR . 'inc/woocommerce.php';
 require_once DANKCAVE_DIR . 'inc/seo.php';
+require_once DANKCAVE_DIR . 'inc/performance.php';
 require_once DANKCAVE_DIR . 'inc/compat.php';
 require_once DANKCAVE_DIR . 'inc/maintenance.php';

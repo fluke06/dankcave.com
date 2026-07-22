@@ -58,7 +58,13 @@ while ( have_posts() ) : the_post();
 		<?php if ( $hero_url ) : ?>
 			<div class="dc-post__hero">
 				<div class="dc-post__hero-well">
-					<img src="<?php echo esc_url( $hero_url ); ?>" alt="<?php the_title_attribute(); ?>">
+					<img src="<?php echo esc_url( $hero_url ); ?>"
+					alt="<?php the_title_attribute(); ?>"
+					width="960" height="540"
+					loading="eager"
+					fetchpriority="high"
+					decoding="async"
+					class="skip-lazy no-lazyload">
 				</div>
 			</div>
 		<?php endif; ?>

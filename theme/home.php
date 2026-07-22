@@ -64,7 +64,13 @@ if ( $is_page_1 && ! is_category() && ! is_tag() && have_posts() ) {
 			<a class="dc-blog-featured" href="<?php echo esc_url( $permalink ); ?>">
 				<div class="dc-blog-featured__media">
 					<?php if ( $image ) : ?>
-						<img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy">
+						<img src="<?php echo esc_url( $image ); ?>"
+							alt=""
+							width="960" height="540"
+							loading="eager"
+							fetchpriority="high"
+							decoding="async"
+							class="skip-lazy no-lazyload">
 					<?php endif; ?>
 				</div>
 				<div class="dc-blog-featured__body">

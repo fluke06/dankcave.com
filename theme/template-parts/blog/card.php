@@ -40,10 +40,24 @@ if ( $post ) {
 }
 
 ?>
+<?php
+// First blog card on a page is LCP-eligible on mobile — eager-load + high
+// fetchpriority so the intersection observer doesn't delay the biggest paint.
+static $dc_blog_card_index = 0;
+$dc_blog_card_index++;
+$is_priority = ( 1 === $dc_blog_card_index );
+?>
 <a class="blog-card" href="<?php echo esc_url( $permalink ); ?>">
 	<div class="blog-card__well">
 		<?php if ( $image_url ) : ?>
-			<img src="<?php echo esc_url( $image_url ); ?>" alt="" loading="lazy" width="720" height="450">
+			<img src="<?php echo esc_url( $image_url ); ?>"
+				alt=""
+				width="720" height="450"
+				<?php if ( $is_priority ) : ?>
+					loading="eager" fetchpriority="high" decoding="async" class="skip-lazy no-lazyload"
+				<?php else : ?>
+					loading="lazy" decoding="async"
+				<?php endif; ?>>
 		<?php endif; ?>
 	</div>
 	<div class="blog-card__body">
