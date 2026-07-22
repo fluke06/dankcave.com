@@ -51,5 +51,9 @@ tmp/
 # QA output (regenerated on each run)
 qa/screenshots/
 
+# PII — never commit customer exports (2580-row Shopify CSV etc.)
+notes/migration/*.csv
+notes/migration/*.xlsx
+
 # macOS metadata
 ._*
