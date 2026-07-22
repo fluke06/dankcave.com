@@ -28,8 +28,9 @@ if ( $product->is_featured() ) {
 $hero_url = $main_id
 	? wp_get_attachment_image_url( $main_id, 'large' )
 	: wc_placeholder_img_src( 'large' );
+$gallery_class = 'pdp-gallery' . ( count( $gallery_ids ) > 1 ? '' : ' pdp-gallery--single' );
 ?>
-<div class="pdp-gallery">
+<div class="<?php echo esc_attr( $gallery_class ); ?>">
 	<?php if ( count( $gallery_ids ) > 1 ) : ?>
 		<div class="pdp-gallery__thumbs" role="tablist" aria-label="<?php esc_attr_e( 'Product thumbnails', 'dankcave' ); ?>">
 			<?php foreach ( $gallery_ids as $i => $img_id ) :
