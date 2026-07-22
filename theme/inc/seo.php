@@ -250,6 +250,15 @@ function dankcave_demote_content_h1( $html ) {
 	if ( function_exists( 'WC' ) && ( is_cart() || is_checkout() || is_account_page() ) ) {
 		return $html;
 	}
+	// Pages using the full-bleed landing template render patterns as their
+	// primary content and rely on the content H1 (About hero, legal-page hero,
+	// etc.) as the sole H1 for the document.
+	if ( is_singular( 'page' ) ) {
+		$tpl = get_page_template_slug( get_the_ID() );
+		if ( 'page-templates/landing.php' === $tpl ) {
+			return $html;
+		}
+	}
 	if ( is_singular( array( 'page', 'post', 'product' ) ) ) {
 		$html = preg_replace( '#<h1(\b[^>]*)>#i', '<h2$1>', $html );
 		$html = str_ireplace( '</h1>', '</h2>', $html );

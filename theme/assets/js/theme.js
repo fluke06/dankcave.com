@@ -85,6 +85,20 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		}
 	}
 
+	// Legal-page scroll progress bar — thin yellow bar that fills as the user
+	// scrolls. Cheap: one scroll listener that reads scrollHeight/clientHeight.
+	( function () {
+		const bar = document.querySelector( '.dc-legal__progress-bar' );
+		if ( ! bar ) return;
+		const paint = function () {
+			const h   = document.documentElement;
+			const max = h.scrollHeight - h.clientHeight;
+			bar.style.width = ( max > 0 ? Math.min( 100, ( h.scrollTop / max ) * 100 ) : 0 ) + '%';
+		};
+		window.addEventListener( 'scroll', paint, { passive: true } );
+		paint();
+	} )();
+
 	// Accordions: animate open/close with a max-height transition. The native
 	// <details> element snaps instantly, so we override the toggle and animate
 	// a wrapper around the content. Applies to every <details> on the site —

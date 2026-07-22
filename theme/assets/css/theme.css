@@ -6894,3 +6894,175 @@ body.woocommerce-order-received .dc-compare-tray { display: none !important; }
 	.dc-thankyou__item-total { grid-column: 2; padding-top: 4px; }
 	.dc-thankyou__item-thumb { width: 60px; height: 60px; }
 }
+
+/* =============================================================================
+   LEGAL PAGES — Privacy, Terms, Shipping Policy, Returns
+   Shared editorial layout: big display hero, gold scroll-progress bar,
+   numbered sections with wine-red number pills, dark and wine-bordered
+   callout cards for emphasis.
+   ============================================================================= */
+.dc-legal { background: var(--cream-100); counter-reset: dc-section; }
+
+.dc-legal__progress {
+	position: sticky;
+	top: 74px;
+	z-index: 15;
+	height: 3px;
+	background: transparent;
+	pointer-events: none;
+	margin: 0;
+}
+.dc-legal__progress-bar {
+	height: 100%;
+	width: 0%;
+	background: #f8c913;
+	transition: width .12s linear;
+}
+
+.dc-legal__hero {
+	padding: 56px var(--gutter-x) 8px;
+}
+.dc-legal__hero > .wp-block-group__inner-container { max-width: 900px; margin: 0 auto; }
+.dc-legal__hero-inner {
+	max-width: 900px;
+	margin: 0 auto;
+}
+.dc-legal__title {
+	font-family: var(--font-body);
+	font-weight: 800;
+	font-size: 88px;
+	line-height: .94;
+	letter-spacing: -.04em;
+	margin: 0;
+	max-width: 15ch;
+	color: var(--ink-4);
+}
+.dc-legal__title-accent { color: var(--accent-wine); }
+.dc-legal__lede {
+	font-size: 17px;
+	line-height: 1.7;
+	color: var(--muted-4);
+	margin: 22px 0 0;
+	max-width: 52ch;
+}
+
+.dc-legal__body {
+	padding: 36px var(--gutter-x) 64px;
+}
+.dc-legal__body > .wp-block-group__inner-container { max-width: 900px; margin: 0 auto; }
+.dc-legal__body-inner {
+	max-width: 900px;
+	margin: 0 auto;
+}
+.dc-legal__intro {
+	font-size: 16px;
+	line-height: 1.8;
+	color: var(--muted-4);
+	margin: 0 0 14px;
+}
+
+.dc-legal__section {
+	padding: 32px 0;
+	border-top: 1px solid var(--cream-500);
+	counter-increment: dc-section;
+}
+.dc-legal__h2 {
+	font-family: var(--font-body);
+	font-weight: 800;
+	font-size: 24px;
+	line-height: 1.25;
+	letter-spacing: -.02em;
+	margin: 0 0 14px;
+	color: var(--ink-4);
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+.dc-legal__h2::before {
+	content: counter(dc-section);
+	font-family: var(--font-body);
+	font-weight: 800;
+	font-size: 15px;
+	color: var(--accent-wine);
+	background: #fff;
+	border: 1px solid var(--cream-500);
+	border-radius: 10px;
+	width: 34px;
+	height: 34px;
+	display: grid;
+	place-items: center;
+	flex: none;
+}
+.dc-legal__p {
+	font-size: 15.5px;
+	line-height: 1.8;
+	color: var(--muted-4);
+	margin: 0 0 14px;
+}
+.dc-legal__p strong { color: var(--ink-6); }
+.dc-legal__p a,
+.dc-legal__body a {
+	color: var(--accent-wine);
+	font-weight: 700;
+	text-decoration: none;
+}
+.dc-legal__p a:hover,
+.dc-legal__body a:hover { text-decoration: underline; }
+
+.dc-legal__list {
+	margin: 6px 0 0;
+	padding-left: 18px;
+	color: var(--muted-4);
+	font-size: 15.5px;
+	line-height: 1.8;
+}
+.dc-legal__list li { margin-bottom: 8px; }
+.dc-legal__list li strong { color: var(--ink-6); }
+
+/* Dark accent card */
+.dc-legal__card {
+	background: var(--ink-4);
+	color: var(--cream-200);
+	border-radius: 20px;
+	padding: 26px 28px;
+	margin: 0 0 14px;
+}
+.dc-legal__card p { margin: 0; font-size: 16px; line-height: 1.7; font-weight: 500; }
+.dc-legal__card--big p { font-size: 17px; }
+.dc-legal__card-accent { color: #f8c913; font-weight: 800; }
+
+/* Wine-left-border warning card (surgeon general etc.) */
+.dc-legal__warning {
+	background: #fff;
+	border: 1px solid var(--cream-500);
+	border-left: 4px solid var(--accent-wine);
+	border-radius: 14px;
+	padding: 20px 22px;
+	margin: 0 0 14px;
+}
+.dc-legal__warning p {
+	font-size: 14.5px;
+	line-height: 1.7;
+	color: var(--muted-4);
+	margin: 0;
+}
+.dc-legal__warning strong { color: var(--ink-6); }
+
+/* Soft info card */
+.dc-legal__info {
+	background: #fff;
+	border: 1px solid var(--cream-500);
+	border-radius: 16px;
+	padding: 20px 22px;
+	margin-top: 16px;
+}
+.dc-legal__info p { font-size: 15px; line-height: 1.75; color: var(--muted-4); margin: 0; }
+
+@media (max-width: 640px) {
+	.dc-legal__hero { padding: 44px var(--gutter-x) 12px; }
+	.dc-legal__title { font-size: 44px; }
+	.dc-legal__body { padding: 32px var(--gutter-x) 44px; }
+	.dc-legal__section { padding: 24px 0; }
+	.dc-legal__h2 { font-size: 22px; }
+	.dc-legal__card { padding: 22px 20px; }
+}

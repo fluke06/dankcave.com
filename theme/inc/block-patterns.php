@@ -48,6 +48,10 @@ function dankcave_register_patterns() {
 		'customer-satisfaction' => array( 'title' => __( 'About — Satisfaction Band','dankcave' ), 'description' => __( 'Dark two-column band with narrative + CTA on the left and 2×2 stat cards on the right.', 'dankcave' ), 'keywords' => array( 'about', 'satisfaction', 'stats' ) ),
 		'community-cta'         => array( 'title' => __( 'About — Community CTA',    'dankcave' ), 'description' => __( 'Centered closer with eyebrow, headline, intro and two buttons.', 'dankcave' ), 'keywords' => array( 'about', 'cta', 'community' ) ),
 		'contact-split'         => array( 'title' => __( 'Contact — Form + FAQ',     'dankcave' ), 'description' => __( 'Two-column contact page: form on the left (uses Contact Form 7 shortcode), FAQ accordion on the right.', 'dankcave' ), 'keywords' => array( 'contact', 'form', 'faq' ) ),
+		'page-privacy'          => array( 'title' => __( 'Legal — Privacy Policy',    'dankcave' ), 'description' => __( 'Full Privacy Policy page: display hero, auto-numbered sections, dark accent card. Content lives in blocks so Javid can edit each section from the editor.', 'dankcave' ), 'keywords' => array( 'legal', 'privacy', 'gdpr' ) ),
+		'page-terms'            => array( 'title' => __( 'Legal — Terms of Service', 'dankcave' ),  'description' => __( 'Full Terms page: hero, 21+ warning card, surgeon-general warning cards, and 16 numbered sections. All blocks; auto-numbered via CSS counter.', 'dankcave' ), 'keywords' => array( 'legal', 'terms', 'tos' ) ),
+		'page-shipping'         => array( 'title' => __( 'Legal — Shipping Policy',  'dankcave' ),  'description' => __( 'Full Shipping Policy page: hero, 6 numbered sections including a dark damage-claim callout.', 'dankcave' ), 'keywords' => array( 'legal', 'shipping', 'delivery' ) ),
+		'page-returns'          => array( 'title' => __( 'Legal — Returns & Refunds','dankcave' ),  'description' => __( 'Full Returns page: hero, 7 numbered sections covering RMA process, damage claims, refund timing.', 'dankcave' ), 'keywords' => array( 'legal', 'returns', 'refunds' ) ),
 	);
 
 	foreach ( $patterns as $slug => $meta ) {
